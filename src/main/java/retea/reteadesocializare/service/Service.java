@@ -115,15 +115,10 @@ public class Service {
      * @param messageTask
      *      messageTask must be not null
      * @return the removed friendship or null if there is no friendship with the given id
-     * @throws IllegalArgumentException
-     *                   if the given messageTask is null.
      */
-    public Friendship deleteFriendship (Tuple<Long,Long> messageTask) throws ServiceException{
-        if(friendshipRepository.findOne(messageTask) != null) {
-            Friendship task = friendshipRepository.delete(messageTask);
-            return task;
-        }
-        else throw new ServiceException("ID not found!");
+    public Friendship deleteFriendship (Tuple<Long,Long> messageTask){
+        Friendship task = friendshipRepository.delete(messageTask);
+        return task;
     }
     /**
      *
@@ -207,11 +202,8 @@ public class Service {
      *
      * @param id - user's id
      * @return a list of user's friends
-     * @throws ServiceException if user doesn't exists
      */
-    public List<User> getUserFriends(Long id) throws ServiceException{
-        if(userRepository.findOne(id) == null)
-            throw new ServiceException("ID invalid");
+    public List<User> getUserFriends(Long id) {
         User user=findOneUser(id);
         Iterable<Friendship> friendships=getAllFriendships();
         List<Friendship> friendshipsList = new ArrayList<>();
@@ -436,17 +428,14 @@ public class Service {
      * @param idFrom - id of the user who sent the friend request
      * @param idTo - id of the user to respond the friend request
      * @param response - friend request's response(approved, rejected)
-     * @throws ServiceException
      */
-    public void responseToFriendRequest(Long idFrom, Long idTo, String response) throws ServiceException {
+    public void responseToFriendRequest(Long idFrom, Long idTo, String response) {
         Long sender = idFrom;
         if(idFrom > idTo){
             Long swap = idFrom;
             idFrom = idTo;
             idTo = swap;
         }
-        if(friendshipRepository.findOne(new Tuple<Long, Long> (idFrom, idTo)) == null)
-            throw new ServiceException("Invalid friend request!");
         Friendship newFriendship = new Friendship(response, idFrom, idTo, sender);
         friendshipRepository.update(newFriendship);
     }

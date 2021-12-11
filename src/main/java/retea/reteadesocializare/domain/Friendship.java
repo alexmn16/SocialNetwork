@@ -76,4 +76,7 @@ public class Friendship extends Entity<Tuple<Long,Long>> {
     public int hashCode() {
         return Objects.hash(date, friendshipStatus, sender);
     }
+
 }
+
+
