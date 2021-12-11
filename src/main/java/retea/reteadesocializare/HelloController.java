@@ -4,7 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import retea.reteadesocializare.domain.Friendship;
@@ -28,9 +31,12 @@ import retea.reteadesocializare.service.Service;
 import retea.reteadesocializare.service.ServiceException;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class HelloController {
     Service service;
+    ObservableList<String> items = FXCollections.observableArrayList();
 
     public HelloController() {
         Repository<Long, User> userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new UserValidator());
@@ -38,18 +44,15 @@ public class HelloController {
         MessageDbRepository messageDbRepository=new MessageDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new MessageValidator(),userDbRepository);
         Service service1 = new Service(userDbRepository, friendshipDbRepository,messageDbRepository);
         this.service = service1;
-        //initFriendsList();
     }
 
-    /*
-    public void initFriendsList(){
-        FriendsList=new ListView<String>();
-        items = FXCollections.observableArrayList (
-                "RUBY", "APPLE", "VISTA", "TWITTER");
-        FriendsList.setItems(items);
-    }
-    */
-    //ObservableList<String> items;
+    Long ID;
+    @FXML
+    private ListView<String> FriendsList;
+
+
+    @FXML
+    private BorderPane BorderPane;
 
     @FXML
     private Label ErrorMessageLoginIn;
@@ -81,11 +84,10 @@ public class HelloController {
     @FXML
     private GridPane GridPaneListFriends;
 
-    @FXML
-    private ListView<String> FriendsList;
+    private Parent root;
 
     @FXML
-    void LogInButtonClicked(MouseEvent event) throws IOException {
+    public void LogInButtonClicked(MouseEvent event) throws IOException {
         /*
         Stage stage = new Stage();
         stage.setTitle("My New Stage Title");
@@ -98,16 +100,31 @@ public class HelloController {
         String id = null;
         id= LoginTextField.getText();
         try {
-            Long ID = Long.parseLong(id);
+            ID = Long.parseLong(id);
+
             Iterable<User> l= service.getAllUsers();
             service.checkUserExistence(ID);
 
-            Stage stage = new Stage();
+            //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("mainMenu-view.fxml"));
+
+            /*
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(HelloApplication.getResource("mainMenu-view.fxml"));
+
+            FriendsListController editMessageViewController = fxmlLoader.getController();
+            editMessageViewController.setService(service, ID);
+*/
+
+            FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
+            root=loader.load();
+            MainMenuController mainMenuController = loader.getController();
+            mainMenuController.setService(service,ID);
+
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            Scene scene=new Scene(root);
             stage.setTitle("CyberBear");
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("mainMenu-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             stage.setScene(scene);
-            ((Node)(event.getSource())).getScene().getWindow().hide();
+            //((Node)(event.getSource())).getScene().getWindow().hide();
             stage.show();
 
         } catch (NumberFormatException ex) {
@@ -118,34 +135,6 @@ public class HelloController {
 
     }
 
-    @FXML
-    void FriendRequestsButtonClicked(MouseEvent event) throws IOException {
-
-    }
-
-    @FXML
-    void FriendsListButtonClicked(MouseEvent event) throws IOException {
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-        Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("friendsList-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("CyberBear");
-        stage.setScene(scene);
-
-        stage.show();
-
-    }
-
-    @FXML
-    void LogOutButtonClicked(MouseEvent event) throws IOException {
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-        Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("Log In");
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public void setService(Service service) {
         this.service = service;

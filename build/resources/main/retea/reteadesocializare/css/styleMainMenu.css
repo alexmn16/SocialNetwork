@@ -4,3 +4,17 @@
 .button:hover{
     -fx-background-color:   #00FFFF ;
 }
+
+.list-view{
+    -fx-background-color:  #F0FFFF;
+}
+.list-cell {
+    -fx-background-color:  #F0FFFF;
+}
+.list-cell:selected{
+    -fx-background-color: blanchedalmond;
+    -fx-text-fill: green;
+}
+.list-cell:hover{
+    -fx-background-color: blanchedalmond;
+}

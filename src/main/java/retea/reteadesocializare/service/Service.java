@@ -207,11 +207,8 @@ public class Service {
      *
      * @param id - user's id
      * @return a list of user's friends
-     * @throws ServiceException if user doesn't exists
      */
-    public List<User> getUserFriends(Long id) throws ServiceException{
-        if(userRepository.findOne(id) == null)
-            throw new ServiceException("ID invalid");
+    public List<User> getUserFriends(Long id) {
         User user=findOneUser(id);
         Iterable<Friendship> friendships=getAllFriendships();
         List<Friendship> friendshipsList = new ArrayList<>();
