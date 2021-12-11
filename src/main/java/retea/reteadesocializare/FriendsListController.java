@@ -91,7 +91,7 @@ public class FriendsListController implements Initializable {
     void DeleteFriendButtonClicked(MouseEvent event) {
         User selectedUser=FriendsList.getSelectionModel().getSelectedItem();
         Long idUser= selectedUser.getId();
-        try {
+
             Long ID1=ID;
             Long ID2=idUser;
             if (ID1 > ID2) {
@@ -101,23 +101,28 @@ public class FriendsListController implements Initializable {
             }
             Friendship friendship = new Friendship(ID1, ID2);
             service.deleteFriendship(friendship.getId());
-
             ObservableList<User> items = FXCollections.observableArrayList (
                     service.getUserFriends(ID));
             FriendsList.setItems(items);
 
-        }catch(NumberFormatException ex){
-            System.out.println("IDs should be positive numbers\n");
-        }catch(ValidationException ex){
-            System.out.println(ex.toString());
-        }catch(ServiceException ex){
-            System.out.println(ex.getMessage());
-        }
+
+
     }
 
     @FXML
     void FriendRequestsButtonClicked(MouseEvent event) throws IOException {
+        FriendRequestController friendRequestController = new FriendRequestController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("friendRequest-view.fxml"));
+        friendRequestController.setService(service,ID);
+        loader.setController(friendRequestController);
+        root=loader.load();
 
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
     }
 
     @FXML

@@ -1,7 +1,10 @@
 package retea.reteadesocializare;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,18 +16,28 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import retea.reteadesocializare.domain.Friendship;
+import retea.reteadesocializare.domain.User;
+import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.service.Service;
+import retea.reteadesocializare.service.ServiceException;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Scanner;
 
-public class MainMenuController {
+public class FriendRequestController implements Initializable {
+
+    Long ID;
 
     @FXML
-    private ListView<String> FriendsList;
+    private ListView<Friendship> FriendRequests;
 
 
     @FXML
-    private javafx.scene.layout.BorderPane BorderPane;
+    private BorderPane BorderPane;
 
     @FXML
     private Label ErrorMessageLoginIn;
@@ -56,15 +69,29 @@ public class MainMenuController {
     @FXML
     private GridPane GridPaneListFriends;
 
-    Service service;
-    Long ID;
+    @FXML
+    private Button acceptFriendRequestButton;
+
+    @FXML
+    private Button rejectFriendRequestButton;
+
+
+    private Service service;
 
     private Parent root;
 
-    public void setService(Service service,Long ID) {
+    public void setService(Service service, Long id) {
         this.service = service;
-        this.ID=ID;
+        this.ID=id;
     }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources){
+        ObservableList<Friendship> items = FXCollections.observableArrayList (
+                service.pendingFriendships(ID));
+        FriendRequests.setItems(items);
+    }
+
     @FXML
     void FriendRequestsButtonClicked(MouseEvent event) throws IOException {
         FriendRequestController friendRequestController = new FriendRequestController();
@@ -81,6 +108,23 @@ public class MainMenuController {
         stage.show();
     }
 
+    @FXML
+    void acceptFriendRequestButtonClicked(MouseEvent event) {
+            Long idFrom;
+            Friendship selectedFriendship = FriendRequests.getSelectionModel().getSelectedItem();
+            if(selectedFriendship.getId().getLeft().equals(ID))
+                idFrom = selectedFriendship.getId().getRight();
+            else
+                idFrom = selectedFriendship.getId().getLeft();
+
+            String status = "approved";
+            service.responseToFriendRequest( idFrom, ID, status);
+    }
+
+    @FXML
+    void rejectFriendRequestButtonClicked(MouseEvent event) {
+
+    }
     @FXML
     void FriendsListButtonClicked(MouseEvent event) throws IOException {
         FriendsListController friendsListController = new FriendsListController();
@@ -104,13 +148,9 @@ public class MainMenuController {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
         stage.setTitle("Log In");
         stage.setScene(scene);
-
         stage.show();
     }
-
-
-
-
 }
