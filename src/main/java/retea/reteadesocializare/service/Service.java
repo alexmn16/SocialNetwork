@@ -96,14 +96,9 @@ public class Service {
      *         messageTask must be not null
      * @return null- if the given friendship is saved
      *         otherwise returns the friendship
-     * @throws ValidationException
-     *            if the friendship is not valid
-     * @throws IllegalArgumentException
-     *             if the given frinedship is null.     *
+     * @throws ServiceException - if the friendship already exists
      */
     public Friendship addFriendship(Friendship messageTask) throws ServiceException{
-        if(userRepository.findOne(messageTask.getId().getLeft()) == null || userRepository.findOne(messageTask.getId().getRight() )== null)
-            throw new ServiceException("Invalid IDs");
         if(friendshipRepository.findOne(messageTask.getId()) == null) {
             Friendship task = friendshipRepository.save(messageTask);
             return task;
@@ -455,6 +450,9 @@ public class Service {
                 pendingFriendships.add(friendship);
         }
         return pendingFriendships;
+    }
+    public Iterable<User> findAllUsersStartsWith(String text){
+        return userRepository.findAllUsersStartsWith(text);
     }
 
     private void through(Long i, List<Long> entries, Map<Long, Integer> visited,  Map<Long, List<Long>>graph){

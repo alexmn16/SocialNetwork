@@ -185,7 +185,8 @@ public class MessageDbRepository implements Repository<Long, Message> {
         return null;
     }
 
-
-
-
+    @Override
+    public Iterable<Message> findAllUsersStartsWith(String text) {
+        return null;
+    }
 }

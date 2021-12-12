@@ -88,15 +88,6 @@ public class HelloController {
 
     @FXML
     public void LogInButtonClicked(MouseEvent event) throws IOException {
-        /*
-        Stage stage = new Stage();
-        stage.setTitle("My New Stage Title");
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 200, 200);
-        stage.setScene(scene);
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-        stage.show();
-        */
         String id = null;
         id= LoginTextField.getText();
         try {
@@ -104,16 +95,6 @@ public class HelloController {
 
             Iterable<User> l= service.getAllUsers();
             service.checkUserExistence(ID);
-
-            //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("mainMenu-view.fxml"));
-
-            /*
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(HelloApplication.getResource("mainMenu-view.fxml"));
-
-            FriendsListController editMessageViewController = fxmlLoader.getController();
-            editMessageViewController.setService(service, ID);
-*/
 
             FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
             root=loader.load();
@@ -124,7 +105,6 @@ public class HelloController {
             Scene scene=new Scene(root);
             stage.setTitle("CyberBear");
             stage.setScene(scene);
-            //((Node)(event.getSource())).getScene().getWindow().hide();
             stage.show();
 
         } catch (NumberFormatException ex) {
@@ -137,6 +117,7 @@ public class HelloController {
 
 
     public void setService(Service service) {
+
         this.service = service;
     }
 }

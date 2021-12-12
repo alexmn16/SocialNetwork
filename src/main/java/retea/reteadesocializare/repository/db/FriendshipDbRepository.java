@@ -118,4 +118,9 @@ public class FriendshipDbRepository implements Repository<Tuple<Long, Long>, Fri
         }
         return null;
     }
+
+    @Override
+    public Iterable<Friendship> findAllUsersStartsWith(String text) {
+        return null;
+    }
 }

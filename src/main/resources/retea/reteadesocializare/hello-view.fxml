@@ -10,41 +10,30 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" stylesheets="@./css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="retea.reteadesocializare.HelloController">
-   <left>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="400.0" fitWidth="246.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="22.22222900390625" AnchorPane.topAnchor="0.0">
-               <image>
-                  <Image url="@images/sky.jpg" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-   </left>
    <center>
-      <AnchorPane prefHeight="147.0" prefWidth="177.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="400.0" prefWidth="490.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="126.0" fitWidth="137.0" layoutX="132.0" layoutY="23.0">
-               <image>
-                  <Image url="@images/loginIcon.jpg" />
-               </image>
-            </ImageView>
-            <Label alignment="CENTER" layoutX="7.0" layoutY="200.0" prefHeight="54.0" prefWidth="125.0" text="ID:" textAlignment="JUSTIFY" textFill="#357ed7">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <TextField fx:id="LoginTextField" alignment="CENTER" layoutX="161.0" layoutY="200.0" prefHeight="55.0" prefWidth="221.0" promptText="Your id">
+            <TextField fx:id="LoginTextField" alignment="CENTER" layoutX="248.0" layoutY="199.0" prefHeight="39.0" prefWidth="174.0" promptText="Introduce your ID...">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="100.0" layoutY="291.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="42.0" prefWidth="199.0" text="Log in" textAlignment="JUSTIFY" />
+            <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="284.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="42.0" prefWidth="199.0" text="Log in" textAlignment="JUSTIFY" />
             <Label fx:id="ErrorMessageLoginIn" alignment="CENTER" contentDisplay="CENTER" layoutX="45.0" layoutY="350.0" prefHeight="28.0" prefWidth="312.0" textAlignment="CENTER" textFill="#a30505">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
+            <Label alignment="CENTER" layoutX="154.0" layoutY="200.0" prefHeight="35.0" prefWidth="70.0" text="ID:" textAlignment="JUSTIFY" textFill="#357ed7">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="188.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logo.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </center>

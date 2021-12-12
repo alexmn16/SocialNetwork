@@ -45,9 +45,6 @@
             </children>
         </VBox>
         <BorderPane fx:id="BorderPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F0FFFF;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <center>
-                <ListView fx:id="FriendRequests" prefHeight="277.0" prefWidth="464.0" BorderPane.alignment="CENTER" />
-            </center>
          <bottom>
             <HBox prefHeight="100.0" prefWidth="469.0" BorderPane.alignment="CENTER">
                <children>
@@ -64,6 +61,14 @@
                </children>
             </HBox>
          </bottom>
+         <center>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                      <ListView fx:id="FriendRequests" prefHeight="277.0" prefWidth="464.0" />
+                  <ListView fx:id="FriendRequestListDate" prefHeight="213.0" prefWidth="489.0" />
+               </children>
+            </HBox>
+         </center>
         </BorderPane>
         <ImageView fitHeight="81.0" fitWidth="136.0">
             <image>
@@ -73,6 +78,7 @@
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
             <children>
                 <TextField fx:id="SearchBar" layoutX="67.0" layoutY="31.0" prefHeight="25.0" prefWidth="295.0" promptText="Search people...." style="-fx-background-color: white;" />
+            <Button fx:id="SearchButton" layoutX="381.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#searchButtonClicked" text="Search" textFill="WHITE" />
             </children>
         </AnchorPane>
     </children>

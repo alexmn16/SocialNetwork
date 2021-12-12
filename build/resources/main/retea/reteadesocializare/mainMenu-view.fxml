@@ -60,7 +60,8 @@
       </ImageView>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
          <children>
-            <TextField fx:id="SearchBar" layoutX="67.0" layoutY="31.0" prefHeight="25.0" prefWidth="295.0" promptText="Search people...." style="-fx-background-color: white;" />
+            <TextField fx:id="SearchBar" layoutX="70.0" layoutY="30.0" prefHeight="25.0" prefWidth="295.0" promptText="Search people...." style="-fx-background-color: white;" />
+            <Button fx:id="SearchButton" layoutX="388.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#searchButtonClicked" text="Search" textFill="WHITE" />
          </children>
       </AnchorPane>
    </children>

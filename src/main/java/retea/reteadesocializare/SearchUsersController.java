@@ -2,6 +2,7 @@ package retea.reteadesocializare;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -24,15 +27,17 @@ import retea.reteadesocializare.service.ServiceException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class FriendsListController implements Initializable {
+public class SearchUsersController implements Initializable {
 
     Long ID;
+    String text;
 
     @FXML
-    private ListView<User> FriendsList;
+    private ListView<User> UserList;
 
 
     @FXML
@@ -40,6 +45,9 @@ public class FriendsListController implements Initializable {
 
     @FXML
     private Label ErrorMessageLoginIn;
+
+    @FXML
+    private Label ErrorMessageAddFriend;
 
     @FXML
     private Label welcomeText;
@@ -60,10 +68,10 @@ public class FriendsListController implements Initializable {
     private Button FriendsListButton;
 
     @FXML
-    private Button SearchButton;
+    private Button LogOutButton;
 
     @FXML
-    private Button LogOutButton;
+    private Button SearchButton;
 
     @FXML
     private TextField SearchBar;
@@ -72,43 +80,42 @@ public class FriendsListController implements Initializable {
     private GridPane GridPaneListFriends;
 
     @FXML
-    private Button DeleteFriendButton;
+    private Button AddFriendButton;
 
     private Service service;
 
     private Parent root;
 
-    public void setService(Service service, Long id) {
+    public void setService(Service service, Long id, String text) {
         this.service = service;
         this.ID=id;
+        this.text=text;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        ObservableList<User> items = FXCollections.observableArrayList (
-                service.getUserFriends(ID));
-        FriendsList.setItems(items);
+        reloadList();
     }
 
     @FXML
-    void DeleteFriendButtonClicked(MouseEvent event) {
-        User selectedUser=FriendsList.getSelectionModel().getSelectedItem();
+    void AddFriendButtonClicked(MouseEvent event) {
+        User selectedUser=UserList.getSelectionModel().getSelectedItem();
         Long idUser= selectedUser.getId();
+        Long ID1=ID;
+        Long ID2=idUser;
+        if (ID1 > ID2) {
+            Long swap = ID1;
+            ID1 = ID2;
+            ID2 = swap;
+        }
 
-            Long ID1=ID;
-            Long ID2=idUser;
-            if (ID1 > ID2) {
-                Long swap = ID1;
-                ID1 = ID2;
-                ID2 = swap;
-            }
             Friendship friendship = new Friendship(ID1, ID2);
-            service.deleteFriendship(friendship.getId());
-            ObservableList<User> items = FXCollections.observableArrayList (
-                    service.getUserFriends(ID));
-            FriendsList.setItems(items);
-
-
+        try {
+            service.addFriendship(friendship);
+        } catch (ServiceException e) {
+            ErrorMessageAddFriend.setText("You are already friends!");
+        }
+        reloadList();
 
     }
 
@@ -173,5 +180,16 @@ public class FriendsListController implements Initializable {
         stage.setScene(scene);
 
         stage.show();
+    }
+
+    public void reloadList(){
+        Iterable<User> users = service.findAllUsersStartsWith(text);
+        List<User> userList = new ArrayList<>();
+        for(User user : users) {
+            if(user.getId() != ID)
+                userList.add(user);
+        }
+        ObservableList<User> items = FXCollections.observableArrayList (userList);
+        UserList.setItems(items);
     }
 }

@@ -24,6 +24,7 @@ import retea.reteadesocializare.service.ServiceException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -33,7 +34,7 @@ public class FriendRequestController implements Initializable {
     Long ID;
 
     @FXML
-    private ListView<Friendship> FriendRequests;
+    private ListView<User> FriendRequests;
 
 
     @FXML
@@ -64,6 +65,9 @@ public class FriendRequestController implements Initializable {
     private Button LogOutButton;
 
     @FXML
+    private Button SearchButton;
+
+    @FXML
     private TextField SearchBar;
 
     @FXML
@@ -75,10 +79,14 @@ public class FriendRequestController implements Initializable {
     @FXML
     private Button rejectFriendRequestButton;
 
+    @FXML
+    private ListView<String> FriendRequestListDate;
+
 
     private Service service;
 
     private Parent root;
+
 
     public void setService(Service service, Long id) {
         this.service = service;
@@ -87,9 +95,21 @@ public class FriendRequestController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        ObservableList<Friendship> items = FXCollections.observableArrayList (
-                service.pendingFriendships(ID));
+        List<Friendship> friendshipList = service.pendingFriendships(ID);
+        List<User> userList =  new ArrayList<>();
+        List<String> dateList = new ArrayList<>();
+        for (Friendship friendship : friendshipList){
+            userList.add(service.findOneUser(friendship.getSender()));
+            dateList.add(friendship.getDate());
+        }
+        ObservableList<User> items = FXCollections.observableArrayList(userList);
+        ObservableList<String> items1 = FXCollections.observableArrayList(dateList);
+        FriendRequestListDate.setMouseTransparent( true );
+        FriendRequestListDate.setFocusTraversable( false );
         FriendRequests.setItems(items);
+        FriendRequestListDate.setItems(items1);
+
+
     }
 
     @FXML
@@ -110,19 +130,22 @@ public class FriendRequestController implements Initializable {
 
     @FXML
     void acceptFriendRequestButtonClicked(MouseEvent event) {
-            Long idFrom;
-            Friendship selectedFriendship = FriendRequests.getSelectionModel().getSelectedItem();
-            if(selectedFriendship.getId().getLeft().equals(ID))
-                idFrom = selectedFriendship.getId().getRight();
-            else
-                idFrom = selectedFriendship.getId().getLeft();
-
-            String status = "approved";
-            service.responseToFriendRequest( idFrom, ID, status);
+        Long idFrom;
+        User selectedUser = FriendRequests.getSelectionModel().getSelectedItem();
+        idFrom = selectedUser.getId();
+        String status = "approved";
+        service.responseToFriendRequest( idFrom, ID, status);
+        reloadItems();
     }
 
     @FXML
     void rejectFriendRequestButtonClicked(MouseEvent event) {
+        Long idFrom;
+        User selectedUser = FriendRequests.getSelectionModel().getSelectedItem();
+        idFrom = selectedUser.getId();
+        String status = "rejected";
+        service.responseToFriendRequest( idFrom, ID, status);
+        reloadItems();
 
     }
     @FXML
@@ -151,6 +174,40 @@ public class FriendRequestController implements Initializable {
 
         stage.setTitle("Log In");
         stage.setScene(scene);
+        stage.show();
+    }
+
+    void reloadItems(){
+        List<Friendship> friendshipList = service.pendingFriendships(ID);
+        List<User> userList =  new ArrayList<>();
+        List<String> dateList = new ArrayList<>();
+        for (Friendship friendship : friendshipList){
+            userList.add(service.findOneUser(friendship.getSender()));
+            dateList.add(friendship.getDate());
+        }
+        ObservableList<User> items = FXCollections.observableArrayList(userList);
+        ObservableList<String> items1 = FXCollections.observableArrayList(dateList);
+        FriendRequestListDate.setMouseTransparent( true );
+        FriendRequestListDate.setFocusTraversable( false );
+        FriendRequests.setItems(items);
+        FriendRequestListDate.setItems(items1);
+
+    }
+
+    @FXML
+    void searchButtonClicked(MouseEvent event) throws IOException{
+        String text = SearchBar.getText();
+        SearchUsersController searchUsersController = new SearchUsersController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("searchUser-view.fxml"));
+        searchUsersController.setService(service,ID,text);
+        loader.setController(searchUsersController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
         stage.show();
     }
 }
