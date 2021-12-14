@@ -22,7 +22,7 @@
     <RowConstraints maxHeight="329.6666615804036" minHeight="10.0" prefHeight="312.6666666666667" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #1F51FF;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
+      <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #4b77bb;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
          <children>
             <Button fx:id="FriendsListButton" mnemonicParsing="false" onMouseClicked="#FriendsListButtonClicked" prefHeight="73.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="See your friends" textAlignment="JUSTIFY" textFill="WHITE">
                <font>

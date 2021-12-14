@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +31,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class SearchUsersController implements Initializable {
 
@@ -80,6 +82,9 @@ public class SearchUsersController implements Initializable {
     private GridPane GridPaneListFriends;
 
     @FXML
+    private ImageView logoBackToMainMenu;
+
+    @FXML
     private Button AddFriendButton;
 
     private Service service;
@@ -100,20 +105,12 @@ public class SearchUsersController implements Initializable {
     @FXML
     void AddFriendButtonClicked(MouseEvent event) {
         User selectedUser=UserList.getSelectionModel().getSelectedItem();
-        Long idUser= selectedUser.getId();
-        Long ID1=ID;
-        Long ID2=idUser;
-        if (ID1 > ID2) {
-            Long swap = ID1;
-            ID1 = ID2;
-            ID2 = swap;
-        }
+        Long idTo = selectedUser.getId();
+        try{
+            service.sendFriendRequest(ID, idTo);
 
-            Friendship friendship = new Friendship(ID1, ID2);
-        try {
-            service.addFriendship(friendship);
-        } catch (ServiceException e) {
-            ErrorMessageAddFriend.setText("You are already friends!");
+        }catch(ServiceException ex){
+            ErrorMessageAddFriend.setText(ex.getMessage());
         }
         reloadList();
 
@@ -151,6 +148,20 @@ public class SearchUsersController implements Initializable {
         stage.show();
 
 
+    }
+
+    @FXML
+    void backToMainMenu(MouseEvent event) throws IOException{
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
+        root=loader.load();
+        MainMenuController mainMenuController = loader.getController();
+        mainMenuController.setService(service,ID);
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

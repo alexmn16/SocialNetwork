@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -78,6 +79,9 @@ public class FriendRequestController implements Initializable {
 
     @FXML
     private Button rejectFriendRequestButton;
+
+    @FXML
+    private ImageView logoBackToMainMenu;
 
     @FXML
     private ListView<String> FriendRequestListDate;
@@ -163,6 +167,20 @@ public class FriendRequestController implements Initializable {
 
         stage.show();
 
+    }
+
+    @FXML
+    void backToMainMenu(MouseEvent event) throws IOException{
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
+        root=loader.load();
+        MainMenuController mainMenuController = loader.getController();
+        mainMenuController.setService(service,ID);
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

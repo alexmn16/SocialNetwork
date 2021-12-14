@@ -11,30 +11,36 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" stylesheets="@./css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="retea.reteadesocializare.HelloController">
    <center>
-      <AnchorPane prefHeight="400.0" prefWidth="490.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="235.0" prefWidth="600.0" style="-fx-background-color: #4b77bb;" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="LoginTextField" alignment="CENTER" layoutX="248.0" layoutY="199.0" prefHeight="39.0" prefWidth="174.0" promptText="Introduce your ID...">
+            <TextField fx:id="LoginTextField" alignment="CENTER" layoutX="268.0" layoutY="76.0" prefHeight="39.0" prefWidth="174.0" promptText="Introduce your ID...">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="284.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="42.0" prefWidth="199.0" text="Log in" textAlignment="JUSTIFY" />
-            <Label fx:id="ErrorMessageLoginIn" alignment="CENTER" contentDisplay="CENTER" layoutX="45.0" layoutY="350.0" prefHeight="28.0" prefWidth="312.0" textAlignment="CENTER" textFill="#a30505">
+            <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="42.0" prefWidth="199.0" text="Log in" textAlignment="JUSTIFY" />
+            <Label fx:id="ErrorMessageLoginIn" alignment="CENTER" contentDisplay="CENTER" layoutX="197.0" layoutY="200.0" prefHeight="28.0" prefWidth="205.0" textAlignment="CENTER" textFill="#a30505">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="154.0" layoutY="200.0" prefHeight="35.0" prefWidth="70.0" text="ID:" textAlignment="JUSTIFY" textFill="#357ed7">
+            <Label alignment="CENTER" layoutX="171.0" layoutY="78.0" prefHeight="35.0" prefWidth="70.0" text="ID:" textAlignment="JUSTIFY" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="188.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+         </children>
+      </AnchorPane>
+   </center>
+   <top>
+      <AnchorPane prefHeight="148.0" prefWidth="600.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="146.0" fitWidth="357.0" layoutX="200.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/logo.png" />
                </image>
             </ImageView>
          </children>
       </AnchorPane>
-   </center>
+   </top>
 </BorderPane>
