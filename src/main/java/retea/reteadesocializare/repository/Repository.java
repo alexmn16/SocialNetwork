@@ -3,6 +3,8 @@ package retea.reteadesocializare.repository;
 import retea.reteadesocializare.domain.Entity;
 import retea.reteadesocializare.domain.validators.ValidationException;
 
+import java.util.List;
+
 /**
  * CRUD operations repository interface
  * @param <ID> - type E must have an attribute of type ID
@@ -64,5 +66,7 @@ public interface Repository<ID, E extends Entity<ID>> {
      *             if the entity is not valid.
      */
     E update(E entity);
+
+    Iterable<E> findAllUsersStartsWith(String text);
 
 }

@@ -25,7 +25,7 @@
         <RowConstraints maxHeight="329.6666615804036" minHeight="10.0" prefHeight="312.6666666666667" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #1F51FF;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
+        <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #4b77bb;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
             <children>
                 <Button fx:id="FriendsListButton" mnemonicParsing="false" onMouseClicked="#FriendsListButtonClicked" prefHeight="73.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="See your friends" textAlignment="JUSTIFY" textFill="WHITE">
                     <font>
@@ -45,9 +45,6 @@
             </children>
         </VBox>
         <BorderPane fx:id="BorderPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F0FFFF;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <center>
-                <ListView fx:id="FriendRequests" prefHeight="277.0" prefWidth="464.0" BorderPane.alignment="CENTER" />
-            </center>
          <bottom>
             <HBox prefHeight="100.0" prefWidth="469.0" BorderPane.alignment="CENTER">
                <children>
@@ -64,8 +61,16 @@
                </children>
             </HBox>
          </bottom>
+         <center>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                      <ListView fx:id="FriendRequests" prefHeight="277.0" prefWidth="464.0" />
+                  <ListView fx:id="FriendRequestListDate" prefHeight="213.0" prefWidth="489.0" />
+               </children>
+            </HBox>
+         </center>
         </BorderPane>
-        <ImageView fitHeight="81.0" fitWidth="136.0">
+        <ImageView fx:id="logoBackToMainMenu" fitHeight="81.0" fitWidth="136.0" onMouseClicked="#backToMainMenu">
             <image>
                 <Image url="@images/logo.png" />
             </image>
@@ -73,6 +78,7 @@
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
             <children>
                 <TextField fx:id="SearchBar" layoutX="67.0" layoutY="31.0" prefHeight="25.0" prefWidth="295.0" promptText="Search people...." style="-fx-background-color: white;" />
+            <Button fx:id="SearchButton" layoutX="381.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#searchButtonClicked" text="Search" textFill="WHITE" />
             </children>
         </AnchorPane>
     </children>

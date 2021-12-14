@@ -96,14 +96,9 @@ public class Service {
      *         messageTask must be not null
      * @return null- if the given friendship is saved
      *         otherwise returns the friendship
-     * @throws ValidationException
-     *            if the friendship is not valid
-     * @throws IllegalArgumentException
-     *             if the given frinedship is null.     *
+     * @throws ServiceException - if the friendship already exists
      */
     public Friendship addFriendship(Friendship messageTask) throws ServiceException{
-        if(userRepository.findOne(messageTask.getId().getLeft()) == null || userRepository.findOne(messageTask.getId().getRight() )== null)
-            throw new ServiceException("Invalid IDs");
         if(friendshipRepository.findOne(messageTask.getId()) == null) {
             Friendship task = friendshipRepository.save(messageTask);
             return task;
@@ -405,21 +400,31 @@ public class Service {
      *
      * @param idFrom - sender's id
      * @param idTo - receiver's id
-     * @throws ServiceException - if receiver doesn't exist
-     *                          - if there is already a friend request between these users
+     * @throws ServiceException - if there is already a friend request between these users
      */
     public void sendFriendRequest(Long idFrom, Long idTo) throws ServiceException {
-        Long sender = idFrom;
+        boolean verify = false;
+        Long sender1 = idFrom;
         if(idFrom > idTo){
             Long swap = idFrom;
             idFrom = idTo;
             idTo = swap;
+            verify = true;
         }
-        if(userRepository.findOne(idTo) == null)
-            throw new ServiceException("invalid id!\n");
-        if(friendshipRepository.findOne(new Tuple<Long, Long> (idFrom, idTo)) != null)
-            throw new ServiceException("There is already a friendship/friend request/rejected friend request between these users\n");
-        Friendship friendship = new Friendship("pending", idFrom, idTo, sender);
+        Friendship friendship1 = friendshipRepository.findOne(new Tuple<Long, Long> (idFrom, idTo));
+        if(friendship1 != null) {
+            Long sender = friendship1.getSender();
+            if (friendship1.getFriendshipStatus().equals("pending"))
+                throw new ServiceException("You have already sent a friend request!");
+            if (friendship1.getFriendshipStatus().equals("approved"))
+                throw new ServiceException("You are already friends!");
+            if (friendship1.getFriendshipStatus().equals("rejected") && verify == false && sender.equals(idFrom) || friendship1.getFriendshipStatus().equals("rejected") && verify == true && sender.equals(idTo))
+                throw new ServiceException("This user rejected your friend request!");
+            if (friendship1.getFriendshipStatus().equals("rejected") && verify == false && sender.equals(idTo) || friendship1.getFriendshipStatus().equals("rejected") && verify == true && sender.equals(idFrom))
+                throw new ServiceException("You rejected his friend request!\nYou can't send a friend request anymore!");
+
+        }
+        Friendship friendship = new Friendship("pending", idFrom, idTo, sender1);
         friendshipRepository.save(friendship);
     }
 
@@ -455,6 +460,9 @@ public class Service {
                 pendingFriendships.add(friendship);
         }
         return pendingFriendships;
+    }
+    public Iterable<User> findAllUsersStartsWith(String text){
+        return userRepository.findAllUsersStartsWith(text);
     }
 
     private void through(Long i, List<Long> entries, Map<Long, Integer> visited,  Map<Long, List<Long>>graph){

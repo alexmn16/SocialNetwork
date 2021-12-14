@@ -24,7 +24,7 @@
         <RowConstraints maxHeight="329.6666615804036" minHeight="10.0" prefHeight="312.6666666666667" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #1F51FF;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
+        <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #4b77bb;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
             <children>
                 <Button fx:id="FriendsListButton" mnemonicParsing="false" onMouseClicked="#FriendsListButtonClicked" prefHeight="73.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="See your friends" textAlignment="JUSTIFY" textFill="WHITE">
                     <font>
@@ -55,7 +55,7 @@
             </Button>
          </bottom>
         </BorderPane>
-        <ImageView fitHeight="81.0" fitWidth="136.0">
+        <ImageView fx:id="logoBackToMainMenu" fitHeight="81.0" fitWidth="136.0" onMouseClicked="#backToMainMenu">
             <image>
                 <Image url="@images/logo.png" />
             </image>
@@ -63,6 +63,7 @@
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
             <children>
                 <TextField fx:id="SearchBar" layoutX="67.0" layoutY="31.0" prefHeight="25.0" prefWidth="295.0" promptText="Search people...." style="-fx-background-color: white;" />
+            <Button fx:id="SearchButton" layoutX="380.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#searchButtonClicked" text="Search" textFill="WHITE" />
             </children>
         </AnchorPane>
     </children>

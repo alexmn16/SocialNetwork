@@ -7,10 +7,8 @@ import retea.reteadesocializare.domain.validators.Validator;
 import retea.reteadesocializare.repository.Repository;
 
 import java.sql.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
 public class UserDbRepository implements Repository<Long, User> {
     private String url;
     private String username;
@@ -60,6 +58,27 @@ public class UserDbRepository implements Repository<Long, User> {
         }
         return users;
     }
+    @Override
+    public Iterable<User> findAllUsersStartsWith(String text) {
+        Set<User> users = new HashSet<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement("SELECT * from users WHERE first_name like '"+text+"%' OR last_name like '"+text+"%'");
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                User utilizator = new User(firstName, lastName);
+                utilizator.setId(id);
+                users.add(utilizator);
+            }
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
     @Override
     public User save(User entity) {
         validator.validate(entity);

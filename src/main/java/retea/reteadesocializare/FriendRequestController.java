@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -24,6 +25,7 @@ import retea.reteadesocializare.service.ServiceException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -64,6 +66,9 @@ public class FriendRequestController implements Initializable {
     private Button LogOutButton;
 
     @FXML
+    private Button SearchButton;
+
+    @FXML
     private TextField SearchBar;
 
     @FXML
@@ -75,10 +80,17 @@ public class FriendRequestController implements Initializable {
     @FXML
     private Button rejectFriendRequestButton;
 
+    @FXML
+    private ImageView logoBackToMainMenu;
+
+    @FXML
+    private ListView<String> FriendRequestListDate;
+
 
     private Service service;
 
     private Parent root;
+
 
     public void setService(Service service, Long id) {
         this.service = service;
@@ -87,16 +99,21 @@ public class FriendRequestController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        List<Friendship> pendingFriendships = service.pendingFriendships(ID);
-        ObservableList<User> items = FXCollections.observableArrayList();
-        for(Friendship friendship: pendingFriendships) {
-            if(ID.equals(friendship.getId().getLeft()))
-                items.add(service.findOneUser(friendship.getId().getRight()));
-            if(ID.equals(friendship.getId().getRight()))
-                items.add(service.findOneUser(friendship.getId().getLeft()));
+        List<Friendship> friendshipList = service.pendingFriendships(ID);
+        List<User> userList =  new ArrayList<>();
+        List<String> dateList = new ArrayList<>();
+        for (Friendship friendship : friendshipList){
+            userList.add(service.findOneUser(friendship.getSender()));
+            dateList.add(friendship.getDate());
         }
-
+        ObservableList<User> items = FXCollections.observableArrayList(userList);
+        ObservableList<String> items1 = FXCollections.observableArrayList(dateList);
+        FriendRequestListDate.setMouseTransparent( true );
+        FriendRequestListDate.setFocusTraversable( false );
         FriendRequests.setItems(items);
+        FriendRequestListDate.setItems(items1);
+
+
     }
 
     @FXML
@@ -117,15 +134,22 @@ public class FriendRequestController implements Initializable {
 
     @FXML
     void acceptFriendRequestButtonClicked(MouseEvent event) {
-            Long idFrom;
-            User selectedUser = FriendRequests.getSelectionModel().getSelectedItem();
-
-            String status = "approved";
-            service.responseToFriendRequest(selectedUser.getId(), ID, status);
+        Long idFrom;
+        User selectedUser = FriendRequests.getSelectionModel().getSelectedItem();
+        idFrom = selectedUser.getId();
+        String status = "approved";
+        service.responseToFriendRequest( idFrom, ID, status);
+        reloadItems();
     }
 
     @FXML
     void rejectFriendRequestButtonClicked(MouseEvent event) {
+        Long idFrom;
+        User selectedUser = FriendRequests.getSelectionModel().getSelectedItem();
+        idFrom = selectedUser.getId();
+        String status = "rejected";
+        service.responseToFriendRequest( idFrom, ID, status);
+        reloadItems();
 
     }
     @FXML
@@ -146,6 +170,20 @@ public class FriendRequestController implements Initializable {
     }
 
     @FXML
+    void backToMainMenu(MouseEvent event) throws IOException{
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
+        root=loader.load();
+        MainMenuController mainMenuController = loader.getController();
+        mainMenuController.setService(service,ID);
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
     void LogOutButtonClicked(MouseEvent event) throws IOException {
         ((Node)(event.getSource())).getScene().getWindow().hide();
         Stage stage = new Stage();
@@ -154,6 +192,40 @@ public class FriendRequestController implements Initializable {
 
         stage.setTitle("Log In");
         stage.setScene(scene);
+        stage.show();
+    }
+
+    void reloadItems(){
+        List<Friendship> friendshipList = service.pendingFriendships(ID);
+        List<User> userList =  new ArrayList<>();
+        List<String> dateList = new ArrayList<>();
+        for (Friendship friendship : friendshipList){
+            userList.add(service.findOneUser(friendship.getSender()));
+            dateList.add(friendship.getDate());
+        }
+        ObservableList<User> items = FXCollections.observableArrayList(userList);
+        ObservableList<String> items1 = FXCollections.observableArrayList(dateList);
+        FriendRequestListDate.setMouseTransparent( true );
+        FriendRequestListDate.setFocusTraversable( false );
+        FriendRequests.setItems(items);
+        FriendRequestListDate.setItems(items1);
+
+    }
+
+    @FXML
+    void searchButtonClicked(MouseEvent event) throws IOException{
+        String text = SearchBar.getText();
+        SearchUsersController searchUsersController = new SearchUsersController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("searchUser-view.fxml"));
+        searchUsersController.setService(service,ID,text);
+        loader.setController(searchUsersController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
         stage.show();
     }
 }

@@ -74,4 +74,8 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
 
     }
 
+    @Override
+    public Iterable<E> findAllUsersStartsWith(String text) {
+        return null;
+    }
 }
