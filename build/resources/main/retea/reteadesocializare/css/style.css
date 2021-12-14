@@ -12,6 +12,7 @@
     -fx-font-size: 14px;
     -fx-padding: 10 20 10 20;
 }
+
 .button:hover{
     -fx-background-color:
             linear-gradient(orange, #e68400),

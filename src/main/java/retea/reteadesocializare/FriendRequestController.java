@@ -33,7 +33,7 @@ public class FriendRequestController implements Initializable {
     Long ID;
 
     @FXML
-    private ListView<Friendship> FriendRequests;
+    private ListView<User> FriendRequests;
 
 
     @FXML
@@ -87,8 +87,15 @@ public class FriendRequestController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        ObservableList<Friendship> items = FXCollections.observableArrayList (
-                service.pendingFriendships(ID));
+        List<Friendship> pendingFriendships = service.pendingFriendships(ID);
+        ObservableList<User> items = FXCollections.observableArrayList();
+        for(Friendship friendship: pendingFriendships) {
+            if(ID.equals(friendship.getId().getLeft()))
+                items.add(service.findOneUser(friendship.getId().getRight()));
+            if(ID.equals(friendship.getId().getRight()))
+                items.add(service.findOneUser(friendship.getId().getLeft()));
+        }
+
         FriendRequests.setItems(items);
     }
 
@@ -111,14 +118,10 @@ public class FriendRequestController implements Initializable {
     @FXML
     void acceptFriendRequestButtonClicked(MouseEvent event) {
             Long idFrom;
-            Friendship selectedFriendship = FriendRequests.getSelectionModel().getSelectedItem();
-            if(selectedFriendship.getId().getLeft().equals(ID))
-                idFrom = selectedFriendship.getId().getRight();
-            else
-                idFrom = selectedFriendship.getId().getLeft();
+            User selectedUser = FriendRequests.getSelectionModel().getSelectedItem();
 
             String status = "approved";
-            service.responseToFriendRequest( idFrom, ID, status);
+            service.responseToFriendRequest(selectedUser.getId(), ID, status);
     }
 
     @FXML
