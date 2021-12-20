@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.BorderPane;
@@ -20,6 +17,7 @@ import javafx.stage.Stage;
 import retea.reteadesocializare.domain.Friendship;
 import retea.reteadesocializare.domain.Tuple;
 import retea.reteadesocializare.domain.User;
+import retea.reteadesocializare.domain.utils.Hashing;
 import retea.reteadesocializare.domain.validators.FriendshipValidator;
 import retea.reteadesocializare.domain.validators.MessageValidator;
 import retea.reteadesocializare.domain.validators.UserValidator;
@@ -34,22 +32,34 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HelloController {
+public class HelloController implements Initializable{
     Service service;
     ObservableList<String> items = FXCollections.observableArrayList();
 
+
     public HelloController() {
+
         Repository<Long, User> userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new UserValidator());
         Repository<Tuple<Long, Long>, Friendship> friendshipDbRepository = new FriendshipDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new FriendshipValidator());
         MessageDbRepository messageDbRepository=new MessageDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new MessageValidator(),userDbRepository);
         Service service1 = new Service(userDbRepository, friendshipDbRepository,messageDbRepository);
         this.service = service1;
+
     }
 
     Long ID;
+
     @FXML
     private ListView<String> FriendsList;
 
+    @FXML
+    private PasswordField InvisiblePasswordField;
+
+    @FXML
+    private Button RegisterButton;
+
+    @FXML
+    private TextField VisiblePasswordField;
 
     @FXML
     private BorderPane BorderPane;
@@ -64,7 +74,7 @@ public class HelloController {
     private Button LogInButton;
 
     @FXML
-    private TextField LoginTextField;
+    private TextField UsernameTextField;
 
     @FXML
     private TextField EditProfileTextField;
@@ -82,23 +92,41 @@ public class HelloController {
     private TextField SearchBar;
 
     @FXML
+    private CheckBox ShowPasswordCheckBox;
+
+    @FXML
     private GridPane GridPaneListFriends;
 
     private Parent root;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources){
+        VisiblePasswordField.setManaged(false);
+        VisiblePasswordField.setVisible(false);
+
+        VisiblePasswordField.managedProperty().bind(ShowPasswordCheckBox.selectedProperty());
+        VisiblePasswordField.visibleProperty().bind(ShowPasswordCheckBox.selectedProperty());
+
+        InvisiblePasswordField.managedProperty().bind(ShowPasswordCheckBox.selectedProperty().not());
+        InvisiblePasswordField.visibleProperty().bind(ShowPasswordCheckBox.selectedProperty().not());
+        VisiblePasswordField.textProperty().bindBidirectional(InvisiblePasswordField.textProperty());
+
+    }
     @FXML
     public void LogInButtonClicked(MouseEvent event) throws IOException {
-        String id = null;
-        id= LoginTextField.getText();
-        try {
-            ID = Long.parseLong(id);
+        String username=UsernameTextField.getText();
+        String password=InvisiblePasswordField.getText();
 
-            Iterable<User> l= service.getAllUsers();
-            service.checkUserExistence(ID);
+        Hashing hashing=new Hashing();
+        password= hashing.hash(password);
+
+        try {
+            ID=service.findOneUser(username,password);
 
             FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
             root=loader.load();
             MainMenuController mainMenuController = loader.getController();
+
             mainMenuController.setService(service,ID);
 
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -107,12 +135,26 @@ public class HelloController {
             stage.setScene(scene);
             stage.show();
 
-        } catch (NumberFormatException ex) {
-            ErrorMessageLoginIn.setText("ID should be a number");
         }catch(ServiceException ex){
             ErrorMessageLoginIn.setText(ex.getMessage());
         }
 
+    }
+
+    @FXML
+    void RegisterButtonClicked(MouseEvent event) throws IOException{
+        RegisterController registerController = new RegisterController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("register-view.fxml"));
+        registerController.setService(service);
+        loader.setController(registerController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
     }
 
 

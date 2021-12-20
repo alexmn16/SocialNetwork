@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -13,22 +15,21 @@
    <center>
       <AnchorPane prefHeight="235.0" prefWidth="600.0" style="-fx-background-color: #4b77bb;" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="LoginTextField" alignment="CENTER" layoutX="268.0" layoutY="76.0" prefHeight="39.0" prefWidth="174.0" promptText="Introduce your ID...">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
+            <Button fx:id="RegisterButton" layoutX="368.0" layoutY="196.0" mnemonicParsing="false" onMouseClicked="#RegisterButtonClicked" prefHeight="18.0" prefWidth="62.0" text="Register" />
             <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="42.0" prefWidth="199.0" text="Log in" textAlignment="JUSTIFY" />
-            <Label fx:id="ErrorMessageLoginIn" alignment="CENTER" contentDisplay="CENTER" layoutX="197.0" layoutY="200.0" prefHeight="28.0" prefWidth="205.0" textAlignment="CENTER" textFill="#a30505">
+            <TextField fx:id="UsernameTextField" layoutX="173.0" layoutY="24.0" prefHeight="40.0" prefWidth="251.0" promptText="Introduce your username..." />
+            <PasswordField fx:id="InvisiblePasswordField" layoutX="173.0" layoutY="85.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." />
+            <TextField fx:id="VisiblePasswordField" layoutX="173.0" layoutY="85.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." />
+            <Label layoutX="161.0" layoutY="200.0" prefHeight="17.0" prefWidth="237.0" text="Haven't registered yet?  Create an account" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font size="10.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="171.0" layoutY="78.0" prefHeight="35.0" prefWidth="70.0" text="ID:" textAlignment="JUSTIFY" textFill="WHITE">
+            <CheckBox fx:id="ShowPasswordCheckBox" layoutX="444.0" layoutY="95.0" mnemonicParsing="false" text="Show password " textFill="WHITE" />
+            <Label fx:id="ErrorMessageLoginIn" contentDisplay="CENTER" layoutX="229.0" layoutY="221.0" prefHeight="17.0" prefWidth="135.0" textFill="#d42b45">
                <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
+                  <Font name="System Bold" size="12.0" />
+               </font></Label>
          </children>
       </AnchorPane>
    </center>

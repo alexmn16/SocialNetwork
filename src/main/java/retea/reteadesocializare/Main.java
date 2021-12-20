@@ -27,7 +27,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.MessageDigest;
+
 public class Main {
+
 
     public static void main(String[] args) {
         String userFileName = "data/users.csv";
@@ -50,8 +54,40 @@ public class Main {
         MessageDbRepository messageDbRepository=new MessageDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "xela160302", new MessageValidator(),userDbRepository);
         Service service = new Service(userDbRepository, friendshipDbRepository,messageDbRepository);
 
+        String password = "myPassword";
+        String encryptedpassword = null;
+        try
+        {
+            /* MessageDigest instance for MD5. */
+            MessageDigest m = MessageDigest.getInstance("MD5");
 
-        //UI ui = new UI(service);
+            /* Add plain-text password bytes to digest using MD5 update() method. */
+            m.update(password.getBytes());
+
+            /* Convert the hash value into bytes */
+            byte[] bytes = m.digest();
+
+            /* The bytes array has bytes in decimal form. Converting it into hexadecimal format. */
+            StringBuilder s = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                s.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+
+            /* Complete hashed password in hexadecimal format */
+            encryptedpassword = s.toString();
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+
+        /* Display the unencrypted and encrypted passwords. */
+        System.out.println("Plain-text password: " + password);
+        System.out.println("Encrypted password using MD5: " + encryptedpassword);
+    }
+
+    //UI ui = new UI(service);
         //ui.run();
     }
-}
+

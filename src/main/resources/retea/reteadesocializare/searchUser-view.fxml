@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -46,18 +47,30 @@
         </VBox>
         <BorderPane fx:id="BorderPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F0FFFF;" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <center>
-                <ListView fx:id="UserList" prefHeight="277.0" prefWidth="464.0" BorderPane.alignment="CENTER" />
+                <ListView fx:id="UserList" prefHeight="249.0" prefWidth="343.0" BorderPane.alignment="CENTER" />
             </center>
-         <bottom>
-                <Button fx:id="DeleteFriendButton" mnemonicParsing="false" onMouseClicked="#AddFriendButtonClicked" text="Add Friend" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets bottom="4.0" top="4.0" />
-                    </BorderPane.margin>
-                </Button>
-         </bottom>
          <top>
             <Label fx:id="ErrorMessageAddFriend" prefHeight="31.0" prefWidth="227.0" textFill="RED" BorderPane.alignment="CENTER" />
          </top>
+         <right>
+            <ListView fx:id="UserListFriendshipStatus" prefHeight="249.0" prefWidth="172.0" BorderPane.alignment="CENTER" />
+         </right>
+         <bottom>
+            <HBox prefHeight="37.0" prefWidth="464.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="CancelRequestButton" mnemonicParsing="false" onMouseClicked="#CancelRequestButtonClicked" text="Cancel request" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </Button>
+                      <Button fx:id="DeleteFriendButton" mnemonicParsing="false" onMouseClicked="#AddFriendButtonClicked" prefHeight="25.0" prefWidth="88.0" text="Add Friend" textAlignment="CENTER" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="160.0" />
+                     </HBox.margin>
+                      </Button>
+               </children>
+            </HBox>
+         </bottom>
         </BorderPane>
         <ImageView fx:id="logoBackToMainMenu" fitHeight="81.0" fitWidth="136.0" onMouseClicked="#backToMainMenu">
             <image>

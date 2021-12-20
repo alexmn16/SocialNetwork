@@ -387,6 +387,20 @@ public class Service {
             throw new ServiceException("Id does not exist");
     }
 
+    public Long findOneUser(String username, String password) throws ServiceException{
+        Iterable<User> users=new ArrayList<>();
+        users=getAllUsers();
+
+        for(User user:users) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password))
+                return user.getId();
+            else if(user.getUsername().equals(username) && !user.getPassword().equals(password))
+                throw new ServiceException("Incorrect password");
+        }
+
+        throw new ServiceException("Account doesn't exist");
+    }
+
     /**
      *
      * @param id - message's id
@@ -511,6 +525,23 @@ public class Service {
 
 
         return result;
+    }
+
+    public List<User> getUserSentFriendRequests(Long id) {
+        List<User> usersSentFriendRequests = new ArrayList<>();
+        Iterable<Friendship> friendships = friendshipRepository.findAll();
+        for (Friendship friendship : friendships) {
+            if (((friendship.getId().getLeft().equals(id) && friendship.getId().getLeft().equals(friendship.getSender()))
+                    && friendship.getFriendshipStatus().equals("pending"))) {
+                usersSentFriendRequests.add(userRepository.findOne(friendship.getId().getRight()));
+            }
+
+            if ((friendship.getId().getRight().equals(id) && friendship.getId().getRight().equals(friendship.getSender())) && friendship.getFriendshipStatus().equals("pending"))
+                usersSentFriendRequests.add(userRepository.findOne(friendship.getId().getLeft()));
+
+
+        }
+        return usersSentFriendRequests;
     }
 }
 

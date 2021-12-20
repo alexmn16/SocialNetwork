@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import retea.reteadesocializare.domain.Friendship;
+import retea.reteadesocializare.domain.Tuple;
 import retea.reteadesocializare.domain.User;
 import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.service.Service;
@@ -103,7 +104,12 @@ public class SearchUsersController implements Initializable {
     }
 
     @FXML
+    private Button CancelRequestButton;
+
+    @FXML
     void AddFriendButtonClicked(MouseEvent event) {
+        ErrorMessageAddFriend.setText("");
+
         User selectedUser=UserList.getSelectionModel().getSelectedItem();
         Long idTo = selectedUser.getId();
         try{
@@ -202,5 +208,30 @@ public class SearchUsersController implements Initializable {
         }
         ObservableList<User> items = FXCollections.observableArrayList (userList);
         UserList.setItems(items);
+    }
+
+    @FXML
+    void CancelRequestButtonClicked(MouseEvent event) {
+        ErrorMessageAddFriend.setText("");
+
+        User selectedUser=UserList.getSelectionModel().getSelectedItem();
+        Long idTo = selectedUser.getId();
+        List<User> users=service.getUserSentFriendRequests(ID);
+        boolean found=false;
+        for(User user: users){
+            Long idUser=user.getId();
+            if(idUser==idTo && idTo<ID) {
+                service.deleteFriendship(new Tuple<>(idTo, ID));
+                found=true;
+            }
+            else if(idUser==idTo && idTo>ID) {
+                service.deleteFriendship(new Tuple<>(ID, idTo));
+                found=true;
+            }
+        }
+        if(found==false)
+            ErrorMessageAddFriend.setText("You haven't sent any friend request");
+
+        reloadList();
     }
 }

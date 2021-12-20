@@ -5,6 +5,7 @@ import retea.reteadesocializare.domain.User;
 import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.domain.validators.Validator;
 import retea.reteadesocializare.repository.Repository;
+import retea.reteadesocializare.domain.utils.Hashing;
 
 import java.sql.*;
 import java.util.*;
@@ -30,7 +31,7 @@ public class UserDbRepository implements Repository<Long, User> {
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next())
                 return null;
-            User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"));
+            User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("username"),resultSet.getString("password"));
             user.setId(resultSet.getLong("id"));
             return user;
         } catch (SQLException e) {
@@ -48,7 +49,9 @@ public class UserDbRepository implements Repository<Long, User> {
                 Long id = resultSet.getLong("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                User utilizator = new User(firstName, lastName);
+                String username= resultSet.getString("username");
+                String password=resultSet.getString("password");
+                User utilizator = new User(firstName, lastName,username,password);
                 utilizator.setId(id);
                 users.add(utilizator);
             }
@@ -68,7 +71,9 @@ public class UserDbRepository implements Repository<Long, User> {
                 Long id = resultSet.getLong("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                User utilizator = new User(firstName, lastName);
+                String username= resultSet.getString("username");
+                String password=resultSet.getString("password");
+                User utilizator = new User(firstName, lastName,username,password);
                 utilizator.setId(id);
                 users.add(utilizator);
             }
@@ -82,11 +87,14 @@ public class UserDbRepository implements Repository<Long, User> {
     @Override
     public User save(User entity) {
         validator.validate(entity);
-        String sql = "insert into users (first_name, last_name ) values (?, ?)";
+        Hashing hashing=new Hashing();
+        String sql = "insert into users (first_name, last_name, username, password ) values (?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
+            ps.setString(3,entity.getUsername());
+            ps.setString(4, hashing.hash(entity.getPassword()));
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
