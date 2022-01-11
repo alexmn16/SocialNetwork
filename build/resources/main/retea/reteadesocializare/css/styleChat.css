@@ -1,0 +1,47 @@
+.button{
+    -fx-background-color:  #4b77bb;
+}
+.button:hover{
+    -fx-background-color:   #00FFFF ;
+}
+.list-view{
+    -fx-background-color:  #F0FFFF;
+}
+.list-cell {
+    -fx-background-color:  #F0FFFF;
+}
+.list-cell:selected{
+    -fx-background-color: blanchedalmond;
+    -fx-text-fill: #4b77bb;
+}
+.list-cell:hover{
+    -fx-background-color: blanchedalmond;
+    -fx-cursor: hand;
+}
+
+.label{
+    -fx-background-color: -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1 0 1 1;
+    -fx-padding: 8 8 5 7;
+    -fx-background-radius: 5;
+}
+
+.infoLabel{
+    -fx-background-color:  #F0FFFF;
+    -fx-text-fill: black;
+}
+.invisibleLabel{
+    -fx-background-color:  #F0FFFF;
+}
+
+.messageReceivedLabel{
+    -fx-background-color: #ebf5f5;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #F0FFFF;
+}
+
+.scroll-pane {
+    -fx-background-color: #F0FFFF;
+}

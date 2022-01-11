@@ -27,10 +27,10 @@
         <AnchorPane prefHeight="337.0" prefWidth="600.0" style="-fx-background-color: #4b77bb;" BorderPane.alignment="CENTER">
             <children>
             <Button fx:id="GoBackButton" layoutX="14.0" layoutY="283.0" mnemonicParsing="false" onMouseClicked="#GoBackButtonClicked" text="Go back" />
-            <Button fx:id="SignUpButton" layoutX="205.0" layoutY="250.0" mnemonicParsing="false" onMouseClicked="#SignUpButtonClicked" prefHeight="30.0" prefWidth="189.0" text="Sign up" />
-                <TextField fx:id="UsernameTextField" layoutX="132.0" layoutY="80.0" prefHeight="36.0" prefWidth="351.0" promptText="Username" />
-                <TextField fx:id="VisiblePasswordField" layoutX="133.0" layoutY="133.0" prefHeight="37.0" prefWidth="350.0" promptText="Password" />
-                <CheckBox fx:id="ShowPasswordCheckBox" layoutX="488.0" layoutY="167.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" text="Show password " textFill="WHITE">
+            <Button fx:id="SignUpButton" layoutX="117.0" layoutY="266.0" mnemonicParsing="false" onMouseClicked="#SignUpButtonClicked" prefHeight="30.0" prefWidth="189.0" text="Sign up" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
+                <TextField fx:id="UsernameTextField" layoutX="120.0" layoutY="80.0" prefHeight="33.0" prefWidth="363.0" promptText="Username" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
+                <TextField fx:id="VisiblePasswordField" layoutX="133.0" layoutY="133.0" prefHeight="33.0" prefWidth="363.0" promptText="Password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="133.0" />
+                <CheckBox fx:id="ShowPasswordCheckBox" layoutX="120.0" layoutY="221.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" text="Show password " textFill="WHITE">
                <font>
                   <Font size="10.0" />
                </font></CheckBox>
@@ -38,21 +38,21 @@
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font></Label>
-            <TextField fx:id="FirstNameTextField" layoutX="133.0" layoutY="29.0" prefHeight="33.0" prefWidth="175.0" promptText="First name" />
-            <TextField fx:id="LastNameTextField" layoutX="320.0" layoutY="29.0" prefHeight="34.0" prefWidth="163.0" promptText="Last name" />
+            <TextField fx:id="FirstNameTextField" layoutX="134.0" layoutY="29.0" prefHeight="33.0" prefWidth="163.0" promptText="First name" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="29.0" />
+            <TextField fx:id="LastNameTextField" layoutX="320.0" layoutY="29.0" prefHeight="33.0" prefWidth="163.0" promptText="Last name" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="29.0" />
             <Label layoutX="216.0" layoutY="-2.0" prefHeight="31.0" prefWidth="208.0" text="Sign up! It's quick and easy " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <TextField fx:id="VisibleConfirmPasswordField" layoutX="132.0" layoutY="184.0" prefHeight="35.0" prefWidth="351.0" promptText="Confirm password" />
-            <Label fx:id="FirstNameError" layoutX="133.0" layoutY="63.0" prefHeight="17.0" prefWidth="175.0" textFill="#d42b45" />
-            <Label fx:id="LastNameError" layoutX="320.0" layoutY="63.0" prefHeight="17.0" prefWidth="257.0" textFill="#d42b45" />
-            <Label fx:id="UsernameError" layoutX="133.0" layoutY="116.0" prefHeight="17.0" prefWidth="349.0" textFill="#d42b45" />
-            <Label fx:id="PasswordError" layoutX="133.0" layoutY="167.0" prefHeight="17.0" prefWidth="350.0" textFill="#d42b45" />
-            <Label fx:id="ConfirmPasswordError" layoutX="132.0" layoutY="221.0" prefHeight="17.0" prefWidth="351.0" textFill="#d42b45" />
-            <PasswordField fx:id="InvisiblePasswordField" layoutX="133.0" layoutY="133.0" prefHeight="37.0" prefWidth="349.0" promptText="Password" />
-            <PasswordField fx:id="InvisibleConfirmPasswordField" layoutX="131.0" layoutY="184.0" prefHeight="36.0" prefWidth="352.0" promptText="Confirm password" />
+            <TextField fx:id="VisibleConfirmPasswordField" layoutX="132.0" layoutY="184.0" prefHeight="33.0" prefWidth="363.0" promptText="Confirm password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="184.0" />
+            <Label fx:id="FirstNameError" layoutX="117.0" layoutY="63.0" prefHeight="17.0" prefWidth="175.0" textFill="#d42b45" AnchorPane.leftAnchor="120.0" />
+            <Label fx:id="LastNameError" layoutX="317.0" layoutY="63.0" prefHeight="17.0" prefWidth="263.0" textFill="#d42b45" />
+            <Label fx:id="UsernameError" layoutX="133.0" layoutY="116.0" prefHeight="17.0" prefWidth="359.0" textFill="#d42b45" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
+            <Label fx:id="PasswordError" layoutX="120.0" layoutY="167.0" prefHeight="17.0" prefWidth="363.0" textFill="#d42b45" AnchorPane.leftAnchor="120.0" />
+            <PasswordField fx:id="InvisibleConfirmPasswordField" layoutX="120.0" layoutY="183.0" prefHeight="36.0" prefWidth="352.0" promptText="Confirm password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="183.0" />
+            <PasswordField fx:id="InvisiblePasswordField" layoutX="117.0" layoutY="149.0" prefHeight="33.0" prefWidth="363.0" promptText="Password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="133.0" />
+            <Label fx:id="ConfirmPasswordError" layoutX="121.0" layoutY="238.0" prefHeight="17.0" prefWidth="351.0" textFill="#d42b45" AnchorPane.leftAnchor="120.0" />
             </children>
         </AnchorPane>
    </bottom>

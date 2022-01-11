@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<GridPane fx:id="GridPaneListFriends" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="600.0" style="-fx-background-color: #F0FFFF;" stylesheets="@./css/styleMainMenu.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.0" minWidth="10.0" prefWidth="135.6666488647461" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="478.6666488647461" minWidth="10.0" prefWidth="463.66668446858716" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="129.33334350585938" minHeight="10.0" prefHeight="86.33333333333333" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="329.6666615804036" minHeight="10.0" prefHeight="312.6666666666667" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #4b77bb;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
+            <children>
+                <Button fx:id="FriendsListButton" mnemonicParsing="false" onMouseClicked="#FriendsListButtonClicked" prefHeight="73.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="See your friends" textAlignment="JUSTIFY" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="FriendRequestsButton" mnemonicParsing="false" onMouseClicked="#FriendRequestsButtonClicked" prefHeight="63.0" prefWidth="137.0" stylesheets="@css/styleMainMenu.css" text="Friend requests" textAlignment="JUSTIFY" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="LogOutButton" mnemonicParsing="false" onMouseClicked="#LogOutButtonClicked" prefHeight="60.0" prefWidth="137.0" stylesheets="@css/styleMainMenu.css" text="Log out" textAlignment="JUSTIFY" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+        <BorderPane fx:id="BorderPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F0FFFF;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <center>
+                <ListView fx:id="EventsList" prefHeight="277.0" prefWidth="464.0" BorderPane.alignment="CENTER" />
+            </center>
+            <bottom>
+                <HBox prefHeight="39.0" prefWidth="464.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Button fx:id="CreateEvent" mnemonicParsing="false" onMouseClicked="#CreateEventButtonClicked" prefHeight="25.0" prefWidth="114.0" text="Create new event" textFill="WHITE">
+                            <opaqueInsets>
+                                <Insets left="200.0" />
+                            </opaqueInsets>
+                            <HBox.margin>
+                                <Insets left="175.0" right="150.0" />
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+            </bottom>
+        </BorderPane>
+        <ImageView fx:id="logoBackToMainMenu" fitHeight="81.0" fitWidth="136.0" onMouseClicked="#backToMainMenu">
+            <image>
+                <Image url="@images/logo.png" />
+            </image>
+        </ImageView>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <children>
+                <TextField fx:id="SearchBar" layoutX="67.0" layoutY="31.0" prefHeight="25.0" prefWidth="295.0" promptText="Search people...." style="-fx-background-color: white;" />
+                <Button fx:id="SearchButton" layoutX="380.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#searchButtonClicked" text="Search" textFill="WHITE" />
+            </children>
+        </AnchorPane>
+    </children>
+</GridPane>

@@ -12,10 +12,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
 public class FriendshipDbRepository implements Repository<Tuple<Long, Long>, Friendship> {
     private String url;
     private String username;
@@ -123,4 +121,7 @@ public class FriendshipDbRepository implements Repository<Tuple<Long, Long>, Fri
     public Iterable<Friendship> findAllUsersStartsWith(String text) {
         return null;
     }
+
+    @Override
+    public List<Friendship> findConversation(Long id1, Long id2){return null;}
 }

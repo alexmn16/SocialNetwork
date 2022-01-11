@@ -50,15 +50,6 @@ public class MessageDbRepository implements Repository<Long, Message> {
             Message message = new Message(user, to, resultSet.getString("message_text"), date);
             message.setId(resultSet.getLong("ID"));
 
-            if(!resultSet.getString("repliers").equals("")) {
-                List<String> repliersAsString = Arrays.asList(resultSet.getString("repliers").split(";"));
-                List<Message> repliers = new ArrayList<>();
-                for (String messageId : repliersAsString)
-                    repliers.add(findOne(Long.parseLong(messageId)));
-                message.setReply(repliers);
-            }
-            else
-                message.setReply(null);
 
             return message;
         } catch (SQLException e) {
@@ -67,7 +58,47 @@ public class MessageDbRepository implements Repository<Long, Message> {
         return null;
     }
 
+    @Override
+    public List<Message> findConversation(Long id1,Long id2) {
+        User user1=userRepository.findOne(id1);
+        User user2=userRepository.findOne(id2);
+        List<Message> messages=new ArrayList<>();
+        String sql = "select * from messages where from_user= ? and to_users = ? or from_user = ? and to_users = ?";
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id1);
+            statement.setLong(2, id2);
+            statement.setLong(4, id1);
+            statement.setLong(3, id2);
 
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+                LocalDateTime date = LocalDateTime.parse(resultSet.getString("date_sent"), formatter);
+
+                User user;
+                List<User> to=new ArrayList<>();
+
+                Long idFrom= resultSet.getLong("from_user");
+                if(idFrom.equals(user1.getId())) {
+                    user = user1;
+                    to.add(user2);
+                }
+                else{
+                    user=user2;
+                    to.add(user1);
+                }
+
+                Message message = new Message(user, to, resultSet.getString("message_text"), date);
+                message.setId(resultSet.getLong("ID"));
+                messages.add(message);
+            }
+            return messages;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     @Override
     public Iterable<Message> findAll() {
         Set<Message> messages = new HashSet<>();
@@ -88,15 +119,6 @@ public class MessageDbRepository implements Repository<Long, Message> {
                 Message message = new Message(user, to, resultSet.getString("message_text"), date);
                 message.setId(resultSet.getLong("ID"));
 
-                if(!resultSet.getString("repliers").equals("")) {
-                    List<String> repliersAsString = Arrays.asList(resultSet.getString("repliers").split(";"));
-                    List<Message> repliers = new ArrayList<>();
-                    for (String messageId : repliersAsString)
-                        repliers.add(findOne(Long.parseLong(messageId)));
-
-                    message.setReply(repliers);
-                }else
-                    message.setReply(null);
 
                 messages.add(message);
             }
@@ -112,31 +134,22 @@ public class MessageDbRepository implements Repository<Long, Message> {
     @Override
     public Message save(Message entity) {
         validator.validate(entity);
-        String sql = "insert into messages ( from_user, to_users, message_text, date_sent, repliers ) values (?, ?, ?, ?, ?)";
+        String sql = "insert into messages ( from_user, to_users, message_text, date_sent, seen ) values (?, ?, ?, ?, false)";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setLong(1,entity.getFrom().getId());
 
-            String toAsString="";
-            for(User user: entity.getTo())
-                toAsString=toAsString+String.valueOf(user.getId())+";";
-            toAsString=toAsString.substring(0,toAsString.length()-1);
-            ps.setString(2, toAsString);
+            if(entity.getTo().size()!=0)
+                ps.setLong(2,entity.getTo().get(0).getId() );
+            else
+                ps.setLong(2,0);
 
             ps.setString(3, entity.getMessageText());
 
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
             String date = entity.getDate().format(formatter);
             ps.setString(4,date);
-
-            String repliersAsString="";
-            if(entity.getReply()!=null) {
-                for (Message message : entity.getReply())
-                    repliersAsString = repliersAsString + String.valueOf(message.getId()) + ";";
-                repliersAsString = repliersAsString.substring(0, repliersAsString.length() - 1);
-            }
-            ps.setString(5,repliersAsString);
 
             ps.executeUpdate();
         } catch (SQLException e) {

@@ -76,9 +76,13 @@ public class Message extends Entity<Long>{
 
     @Override
     public String toString() {
-        return "from=" + from +
-                ", message='" + messageText  +
-                ", date=" + date ;
+        if(messageText.length()>12)
+            return date.toString().substring(0,10) + " " + date.toString().substring(11,16) + " "+from +
+                ": " + messageText.substring(0,11)+" ..." ;
+        else
+            return date.toString().substring(0,10) + " " + date.toString().substring(11,16) + " "+from +
+                    ": " + messageText;
+
     }
 
 

@@ -1,11 +1,14 @@
 package retea.reteadesocializare.repository.memory;
 
 import retea.reteadesocializare.domain.Entity;
+import retea.reteadesocializare.domain.Message;
+import retea.reteadesocializare.domain.User;
 import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.domain.validators.Validator;
 import retea.reteadesocializare.repository.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<ID,E> {
@@ -78,4 +81,7 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     public Iterable<E> findAllUsersStartsWith(String text) {
         return null;
     }
+
+    @Override
+    public List<E> findConversation(Long id1, Long id2){return null;}
 }

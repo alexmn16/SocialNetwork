@@ -26,6 +26,7 @@ import retea.reteadesocializare.repository.db.MessageDbRepository;
 import retea.reteadesocializare.repository.db.UserDbRepository;
 import retea.reteadesocializare.service.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -178,7 +179,8 @@ public class RegisterController implements Initializable {
         if(validData==true) {
 
             service.addUser(new User(firstName, lastName, username, password));
-
+            User user= service.getLastCreatedUser();
+            service.saveAvatar(user.getId(), new File("src/main/resources/retea/reteadesocializare/images/userIcon.jpg"));
             HelloController loginController = new HelloController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
             root = loader.load();

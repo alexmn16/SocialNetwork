@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -48,11 +49,26 @@
             <ListView fx:id="FriendsList" prefHeight="277.0" prefWidth="464.0" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
-            <Button fx:id="DeleteFriendButton" mnemonicParsing="false" onMouseClicked="#DeleteFriendButtonClicked" text="Remove Friend" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets bottom="4.0" top="4.0" />
-               </BorderPane.margin>
-            </Button>
+            <HBox prefHeight="39.0" prefWidth="464.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="DeleteFriendButton" mnemonicParsing="false" onMouseClicked="#DeleteFriendButtonClicked" prefHeight="25.0" prefWidth="111.0" text="Remove Friend" textAlignment="CENTER" textFill="WHITE">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets left="100.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="WriteMessageButton" mnemonicParsing="false" onMouseClicked="#WriteMessageButtonClicked" prefHeight="25.0" prefWidth="103.0" text="Write message" textFill="WHITE">
+                     <opaqueInsets>
+                        <Insets left="200.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets left="60.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
          </bottom>
         </BorderPane>
         <ImageView fx:id="logoBackToMainMenu" fitHeight="81.0" fitWidth="136.0" onMouseClicked="#backToMainMenu">

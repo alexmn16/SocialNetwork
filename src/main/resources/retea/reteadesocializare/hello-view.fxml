@@ -12,27 +12,6 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" stylesheets="@./css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="retea.reteadesocializare.HelloController">
-   <center>
-      <AnchorPane prefHeight="235.0" prefWidth="600.0" style="-fx-background-color: #4b77bb;" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="RegisterButton" layoutX="368.0" layoutY="196.0" mnemonicParsing="false" onMouseClicked="#RegisterButtonClicked" prefHeight="18.0" prefWidth="62.0" text="Register" />
-            <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="42.0" prefWidth="199.0" text="Log in" textAlignment="JUSTIFY" />
-            <TextField fx:id="UsernameTextField" layoutX="173.0" layoutY="24.0" prefHeight="40.0" prefWidth="251.0" promptText="Introduce your username..." />
-            <PasswordField fx:id="InvisiblePasswordField" layoutX="173.0" layoutY="85.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." />
-            <TextField fx:id="VisiblePasswordField" layoutX="173.0" layoutY="85.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." />
-            <Label layoutX="161.0" layoutY="200.0" prefHeight="17.0" prefWidth="237.0" text="Haven't registered yet?  Create an account" textFill="WHITE">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Label>
-            <CheckBox fx:id="ShowPasswordCheckBox" layoutX="444.0" layoutY="95.0" mnemonicParsing="false" text="Show password " textFill="WHITE" />
-            <Label fx:id="ErrorMessageLoginIn" contentDisplay="CENTER" layoutX="229.0" layoutY="221.0" prefHeight="17.0" prefWidth="135.0" textFill="#d42b45">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Label>
-         </children>
-      </AnchorPane>
-   </center>
    <top>
       <AnchorPane prefHeight="148.0" prefWidth="600.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
@@ -44,4 +23,25 @@
          </children>
       </AnchorPane>
    </top>
+   <bottom>
+      <AnchorPane prefHeight="235.0" prefWidth="600.0" style="-fx-background-color: #4b77bb;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="RegisterButton" layoutX="368.0" layoutY="196.0" mnemonicParsing="false" onMouseClicked="#RegisterButtonClicked" prefHeight="18.0" prefWidth="62.0" text="Register" AnchorPane.rightAnchor="175.0" />
+            <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="174.0" layoutY="151.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="37.0" prefWidth="251.0" text="Log in" textAlignment="JUSTIFY" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
+            <TextField fx:id="UsernameTextField" layoutX="173.0" layoutY="24.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your username..." AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
+            <PasswordField fx:id="InvisiblePasswordField" layoutX="173.0" layoutY="74.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." />
+            <Label layoutX="178.0" layoutY="200.0" prefHeight="17.0" prefWidth="188.0" text="Haven't registered yet?  Create an account" textFill="WHITE" AnchorPane.leftAnchor="173.0">
+               <font>
+                  <Font size="9.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="ShowPasswordCheckBox" layoutX="175.0" layoutY="119.0" mnemonicParsing="false" text="Show password " textFill="WHITE" AnchorPane.leftAnchor="173.0" />
+            <Label fx:id="ErrorMessageLoginIn" contentDisplay="CENTER" layoutX="229.0" layoutY="221.0" prefHeight="17.0" prefWidth="135.0" textFill="#d42b45">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Label>
+            <TextField fx:id="VisiblePasswordField" layoutX="173.0" layoutY="74.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
+         </children>
+      </AnchorPane>
+   </bottom>
 </BorderPane>

@@ -33,7 +33,9 @@ public class UserDbRepository implements Repository<Long, User> {
                 return null;
             User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("username"),resultSet.getString("password"));
             user.setId(resultSet.getLong("id"));
+            resultSet.close();
             return user;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -133,4 +135,7 @@ public class UserDbRepository implements Repository<Long, User> {
         }
         return null;
     }
+
+    @Override
+    public List<User> findConversation(Long id1, Long id2){return null;}
 }

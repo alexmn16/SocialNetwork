@@ -1,6 +1,7 @@
 package retea.reteadesocializare.repository;
 
 import retea.reteadesocializare.domain.Entity;
+import retea.reteadesocializare.domain.Message;
 import retea.reteadesocializare.domain.validators.ValidationException;
 
 import java.util.List;
@@ -69,4 +70,5 @@ public interface Repository<ID, E extends Entity<ID>> {
 
     Iterable<E> findAllUsersStartsWith(String text);
 
+    public List<E> findConversation(Long id1, Long id2);
 }

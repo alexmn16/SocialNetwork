@@ -1,14 +1,16 @@
 package retea.reteadesocializare.service;
 
 
-import retea.reteadesocializare.domain.Friendship;
-import retea.reteadesocializare.domain.Message;
-import retea.reteadesocializare.domain.Tuple;
-import retea.reteadesocializare.domain.User;
+import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import retea.reteadesocializare.domain.*;
 import retea.reteadesocializare.domain.validators.MonthValidator;
 import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.repository.Repository;
+import retea.reteadesocializare.repository.db.EventsDbRepository;
+import retea.reteadesocializare.repository.db.GroupsDbRepository;
 
+import java.io.File;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -16,12 +18,16 @@ public class Service {
     private Repository<Long, User> userRepository;
     private Repository<Tuple<Long,Long>, Friendship> friendshipRepository;
     private Repository<Long, Message> messageRepository;
+    private GroupsDbRepository groupsDbRepository;
+    private EventsDbRepository eventsDbRepository;
 
-    public Service(Repository<Long, User> userRepository, Repository<Tuple<Long,Long>, Friendship> friendshipRepository,Repository<Long, Message> messageRepository) {
+    public Service(Repository<Long, User> userRepository, Repository<Tuple<Long,Long>, Friendship> friendshipRepository,Repository<Long, Message> messageRepository, GroupsDbRepository groupsDbRepository, EventsDbRepository eventsDbRepository) {
 
         this.userRepository = userRepository;
         this.friendshipRepository = friendshipRepository;
         this.messageRepository=messageRepository;
+        this.groupsDbRepository=groupsDbRepository;
+        this.eventsDbRepository = eventsDbRepository;
     }
     /**
      *
@@ -269,17 +275,13 @@ public class Service {
      * @param IdWriter - id of message sender
      * @param receivers - a string which contains message receivers
      * @param messageText - content of the message
-     * @throws ServiceException - if ids of sender or receivers are invalid
-     * @throws NumberFormatException - if receivers does not contain numeric ids
      */
 
-    public void writeMessage(Long IdWriter,String receivers,String messageText) throws ServiceException,NumberFormatException {
+    public void writeMessage(Long IdWriter,String receivers,String messageText) {
         User from=userRepository.findOne(IdWriter);
         List<String> toAsString = Arrays.asList(receivers.split(";"));
         List<User> to = new ArrayList<User>();
         for (String userString : toAsString) {
-            if(userRepository.findOne(Long.parseLong(userString))==null)
-                throw new ServiceException("Invalid receivers!");
             to.add(userRepository.findOne(Long.parseLong(userString)));
         }
         Message message=new Message(from,to,messageText);
@@ -291,12 +293,8 @@ public class Service {
      * @param Id1 - first user's id
      * @param Id2 - second user's id
      * @return a list which contains all messages between these users
-     * @throws ServiceException - if users ids are invalid
      */
-    public List<Message> seeMessagesBetweenTwoUsers(Long Id1,Long Id2) throws ServiceException {
-
-        if(userRepository.findOne(Id1)==null ||  userRepository.findOne(Id2)==null)
-            throw new ServiceException("Invalid users!");
+    public List<Message> seeMessagesBetweenTwoUsers(Long Id1,Long Id2){
 
         List<Message> searchedMessages=new ArrayList<>();
         Iterable<Message> messages=messageRepository.findAll();
@@ -307,16 +305,19 @@ public class Service {
         Comparator<Message> compareById = (Message o1, Message o2) -> o1.getId().compareTo( o2.getId() );
         Collections.sort(messageList, compareById);
 
+
         for(Message message:messageList){
             if(message.getFrom().equals(userRepository.findOne(Id1)) && message.getTo().contains(userRepository.findOne(Id2))
              || message.getFrom().equals(userRepository.findOne(Id2)) && message.getTo().contains(userRepository.findOne(Id1)))
                 searchedMessages.add(message);
         }
 
-
         return searchedMessages;
     }
 
+    public List<Message> seeConversation(Long Id1,Long Id2) {
+        return messageRepository.findConversation(Id1,Id2);
+    }
     /**
      *
      * @param id - user's id
@@ -476,6 +477,7 @@ public class Service {
         return pendingFriendships;
     }
     public Iterable<User> findAllUsersStartsWith(String text){
+
         return userRepository.findAllUsersStartsWith(text);
     }
 
@@ -542,6 +544,129 @@ public class Service {
 
         }
         return usersSentFriendRequests;
+    }
+
+    public List<Group> getUserGroups(Long id){
+        return groupsDbRepository.findGroups(id);
+    }
+
+    public void saveGroup(String name, List<User> users, User creatorUser, File image){
+        groupsDbRepository.saveGroup(name,image);
+        Group group= groupsDbRepository.getLastCreatedGroup();
+        for(User user:users){
+            groupsDbRepository.saveUserToGroup(user,group);
+        }
+        groupsDbRepository.saveUserToGroup(creatorUser,group);
+    }
+
+    public User findUser(Long id){
+        return userRepository.findOne(id);
+    }
+
+    public List<Message> seeGroupConversation(Long groupId){
+        return groupsDbRepository.findMessages(groupId);
+
+    }
+
+    public void saveMessageToGroup(Long idSender,String messageText,Long idGroup){
+        List<User> to=new ArrayList<>();
+        Message message=new Message(userRepository.findOne(idSender),to,messageText);
+        messageRepository.save(message);
+        Message lastMessage=groupsDbRepository.getLastCreatedMessage();
+        groupsDbRepository.saveMessageToGroup(lastMessage,idGroup);
+
+    }
+
+    public void saveAvatar(Long id, File image){
+        groupsDbRepository.saveAvatar(id,image);
+    }
+
+    public Image loadAvatar(Long id){
+        return groupsDbRepository.findAvatar(id);
+    }
+
+    public Image loadGroupAvatar(Long id){
+        return groupsDbRepository.loadGroupAvatar(id);
+    }
+
+    public User getLastCreatedUser(){
+        return groupsDbRepository.getLastCreatedUser();
+    }
+
+    public void deleteAvatar(Long id){
+        groupsDbRepository.deleteAvatar(id);
+    }
+
+    public Group findGroup(Long id){return groupsDbRepository.findOne(id);}
+
+    public void setMessagesAsSeen(Long id1,Long id2){groupsDbRepository.setMessagesAsSeen(id1,id2);}
+
+    public List<Message> findUnseenMessages(Long id){return groupsDbRepository.findUnseenMessages(id);}
+
+    public void saveEvent(String name, Long creatorUser, File image, String date, String location, String description){
+        eventsDbRepository.saveEvent(name, date, location, description, creatorUser, image);
+        Event event= eventsDbRepository.getLastCreatedEvent();
+        eventsDbRepository.saveUserToEvent(creatorUser, event);
+    }
+
+    public void addUserToEvent(Long event_id, Long user){
+        Event event = eventsDbRepository.findOne(event_id);
+        eventsDbRepository.saveUserToEvent(user, event);
+    }
+
+    public List<User> findUsersEvent(Long id_event){
+        return eventsDbRepository.findUsers(id_event);
+    }
+
+    public List<Event> findEvents(Long user){
+        return eventsDbRepository.findEvents(user);
+    }
+    public Image loadEventAvatar(Long event){
+        return eventsDbRepository.loadEventAvatar(event);
+    }
+
+    public Iterable<Event> findEventsStartsWith(String text){
+        return eventsDbRepository.findAllEventsStartsWith(text);
+    }
+
+    public Event findEvent(Long id){
+        return eventsDbRepository.findOne(id);
+    }
+
+    public boolean checkUserEvent(Long idUser, Long idEvent){
+        return eventsDbRepository.checkUserEvent(idUser, idEvent);
+    }
+    public boolean checkUserHasNotifications(Long idUser, Long idEvent,Long minutesLeft){
+        return eventsDbRepository.checkUserHasNotifications(idUser,idEvent,minutesLeft);
+    }
+
+    public void deleteUserFromEvent(Long idUser, Long idEvent){
+        eventsDbRepository.deleteUserFromEvent(idUser, idEvent);
+    }
+
+    public Event getLastCreatedEvent(){
+
+        return eventsDbRepository.getLastCreatedEvent();
+    }
+
+    public boolean checkUserEventNotifications(Long idUser, Long idEvent){
+        return eventsDbRepository.checkUserEventNotifications(idUser, idEvent);
+    }
+
+    public void setNotificationsOn(Long idUser, Long idEvent){
+        eventsDbRepository.setNotificationOn(idUser, idEvent);
+    }
+
+    public void setNotificationsOff(Long idUser, Long idEvent){
+        eventsDbRepository.setNotificationOff(idUser, idEvent);
+    }
+
+    public int getLastNotificationSeenFromUser(Long userId, Long eventId){
+        return eventsDbRepository.getLastNotificationSeenFromUser(userId, eventId);
+    }
+
+    public void setLastNotificationSeenFromUser(Long userId, Long eventId, int notification){
+        eventsDbRepository.setLastNotificationSeenFromUser(userId,eventId,notification);
     }
 }
 

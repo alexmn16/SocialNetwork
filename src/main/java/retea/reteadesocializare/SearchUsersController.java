@@ -6,23 +6,26 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import retea.reteadesocializare.domain.Friendship;
-import retea.reteadesocializare.domain.Tuple;
-import retea.reteadesocializare.domain.User;
+import retea.reteadesocializare.domain.*;
 import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.service.Service;
 import retea.reteadesocializare.service.ServiceException;
@@ -40,7 +43,7 @@ public class SearchUsersController implements Initializable {
     String text;
 
     @FXML
-    private ListView<User> UserList;
+    private ListView<Entity> EntityList;
 
 
     @FXML
@@ -88,6 +91,9 @@ public class SearchUsersController implements Initializable {
     @FXML
     private Button AddFriendButton;
 
+    @FXML
+    private Button seeDetailsButton;
+
     private Service service;
 
     private Parent root;
@@ -100,6 +106,9 @@ public class SearchUsersController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
+        seeDetailsButton.setVisible(false);
+        AddFriendButton.setVisible(false);
+        CancelRequestButton.setVisible(false);
         reloadList();
     }
 
@@ -110,7 +119,7 @@ public class SearchUsersController implements Initializable {
     void AddFriendButtonClicked(MouseEvent event) {
         ErrorMessageAddFriend.setText("");
 
-        User selectedUser=UserList.getSelectionModel().getSelectedItem();
+        User selectedUser=(User)EntityList.getSelectionModel().getSelectedItem();
         Long idTo = selectedUser.getId();
         try{
             service.sendFriendRequest(ID, idTo);
@@ -153,20 +162,21 @@ public class SearchUsersController implements Initializable {
 
         stage.show();
 
-
     }
 
     @FXML
     void backToMainMenu(MouseEvent event) throws IOException{
+        MainMenuController mainMenuController = new MainMenuController();
         FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
-        root=loader.load();
-        MainMenuController mainMenuController = loader.getController();
         mainMenuController.setService(service,ID);
+        loader.setController(mainMenuController);
+        root=loader.load();
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene=new Scene(root);
         stage.setTitle("CyberBear");
         stage.setScene(scene);
+
         stage.show();
     }
 
@@ -201,20 +211,123 @@ public class SearchUsersController implements Initializable {
 
     public void reloadList(){
         Iterable<User> users = service.findAllUsersStartsWith(text);
-        List<User> userList = new ArrayList<>();
+        List<User> currentUserFriends=service.getUserFriends(ID);
+        int numberOfFriends=currentUserFriends.size();
+        Iterable<Event> events = service.findEventsStartsWith(text);
+        List<Entity> theList = new ArrayList<>();
+
+
         for(User user : users) {
-            if(user.getId() != ID)
-                userList.add(user);
+            if(user.getId() != ID )
+                theList.add(user);
         }
-        ObservableList<User> items = FXCollections.observableArrayList (userList);
-        UserList.setItems(items);
+
+        for(Event event : events)
+            theList.add(event);
+
+        ObservableList<Entity> items = FXCollections.observableArrayList (theList);
+        EntityList.setItems(items);
+
+        EntityList.setCellFactory(param -> new ListCell<Entity>() {
+            private ImageView imageView = new ImageView();
+            @Override
+            public void updateItem(Entity entity, boolean empty) {
+                super.updateItem(entity, empty);
+
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+
+                    if( entity instanceof User) {
+                        User user = (User)(entity);
+                        Image image = service.loadAvatar(user.getId());
+                        imageView.setImage(image);
+                        imageView.setPreserveRatio(true);
+                        imageView.setFitHeight(60);
+                        imageView.setFitHeight(60);
+                        if(currentUserFriends.contains(user)) {
+                            //setText(user.getFirstName() + " " + user.getLastName());
+                            setText(null);
+                            HBox hbox = new HBox(30);
+                            Label nameLabel = new Label();
+                            nameLabel.setText("\n" + user.getFirstName() + " " + user.getLastName());
+                            Label typeLabel = new Label();
+                            typeLabel.setText("Friend");
+                            typeLabel.setFont(Font.font("System", FontPosture.ITALIC,
+                                    Font.getDefault().getSize()));
+
+                            typeLabel.setStyle("");
+                            hbox.getChildren().add(imageView);
+                            VBox userInfo=new VBox(3);
+                            userInfo.getChildren().add(nameLabel);
+                            userInfo.getChildren().add(typeLabel);
+                            hbox.getChildren().add(userInfo);
+                            setGraphic(hbox);
+                        }
+                        else{
+                            setText(null);
+                            HBox hbox = new HBox(30);
+                            Label name=new Label();
+                            name.setText("\n"+user.getFirstName() + " " + user.getLastName());
+                            hbox.getChildren().add(imageView);
+                            hbox.getChildren().add(name);
+                            setGraphic(hbox);
+                        }
+                    } else {
+                        Event event = (Event)(entity);
+                        Image image = service.loadEventAvatar(event.getId());
+                        imageView.setImage(image);
+                        imageView.setPreserveRatio(true);
+                        imageView.setFitHeight(60);
+                        imageView.setFitHeight(60);
+                        setText(null);
+                        HBox hbox = new HBox(30);
+                        Label nameLabel = new Label();
+                        nameLabel.setText("\n" + event.getName());
+                        Label typeLabel = new Label();
+                        typeLabel.setText("Event");
+                        typeLabel.setFont(Font.font("System", FontPosture.ITALIC,
+                                Font.getDefault().getSize()));
+
+                        typeLabel.setStyle("");
+                        hbox.getChildren().add(imageView);
+                        VBox userInfo=new VBox(3);
+                        userInfo.getChildren().add(nameLabel);
+                        userInfo.getChildren().add(typeLabel);
+                        hbox.getChildren().add(userInfo);
+                        setGraphic(hbox);
+                    }
+                }
+            }
+        });
+        EntityList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+
+                if (event.getClickCount() == 1) {
+                    Entity selectedEntity=EntityList.getSelectionModel().getSelectedItem();
+                    if(selectedEntity instanceof User){
+                        seeDetailsButton.setVisible(false);
+                        AddFriendButton.setVisible(true);
+                        CancelRequestButton.setVisible(true);
+                    }
+                    else {
+                        AddFriendButton.setVisible(false);
+                        CancelRequestButton.setVisible(false);
+                        seeDetailsButton.setVisible(true);
+                    }
+                }
+            }
+        });
     }
 
     @FXML
     void CancelRequestButtonClicked(MouseEvent event) {
         ErrorMessageAddFriend.setText("");
 
-        User selectedUser=UserList.getSelectionModel().getSelectedItem();
+        User selectedUser=(User)EntityList.getSelectionModel().getSelectedItem();
         Long idTo = selectedUser.getId();
         List<User> users=service.getUserSentFriendRequests(ID);
         boolean found=false;
@@ -233,5 +346,23 @@ public class SearchUsersController implements Initializable {
             ErrorMessageAddFriend.setText("You haven't sent any friend request");
 
         reloadList();
+    }
+
+    @FXML
+    void seeDetailsButtonClicked(MouseEvent event) throws IOException{
+        Event selectedItem = (Event)EntityList.getSelectionModel().getSelectedItem();
+        Long idEvent = selectedItem.getId();
+        EventDetailsController eventDetailsController = new EventDetailsController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("eventDetails-view.fxml"));
+        eventDetailsController.setService(service,ID,idEvent);
+        loader.setController(eventDetailsController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
     }
 }

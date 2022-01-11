@@ -1,15 +1,13 @@
 package retea.reteadesocializare;
 
-import retea.reteadesocializare.domain.Friendship;
-import retea.reteadesocializare.domain.Message;
-import retea.reteadesocializare.domain.Tuple;
-import retea.reteadesocializare.domain.User;
+import retea.reteadesocializare.domain.*;
 import retea.reteadesocializare.domain.validators.FriendshipValidator;
 import retea.reteadesocializare.domain.validators.MessageValidator;
 import retea.reteadesocializare.domain.validators.UserValidator;
 import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.repository.Repository;
 import retea.reteadesocializare.repository.db.FriendshipDbRepository;
+import retea.reteadesocializare.repository.db.GroupsDbRepository;
 import retea.reteadesocializare.repository.db.MessageDbRepository;
 import retea.reteadesocializare.repository.db.UserDbRepository;
 import retea.reteadesocializare.repository.file.FriendshipFile;
@@ -18,6 +16,7 @@ import retea.reteadesocializare.repository.memory.InMemoryRepository;
 import retea.reteadesocializare.service.Service;
 //import ui.UI;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -34,60 +33,35 @@ public class Main {
 
 
     public static void main(String[] args) {
-        String userFileName = "data/users.csv";
-        String friendshipFileName = "data/friendships.csv";
-       // try{
-            //Repository<Long, User> userFileRepository = new UserFile(userFileName, new UserValidator());
-            //Repository<Tuple<Long,Long>, Friendship> friendshipFileRepository = new FriendshipFile(friendshipFileName, new FriendshipValidator());
-            //Service service = new Service(userFileRepository, friendshipFileRepository);
-            //UI ui = new UI(service);
-            //ui.run();
+        /*
+        Repository<Long, User> userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new UserValidator());
+        Repository<Tuple<Long, Long>, Friendship> friendshipDbRepository = new FriendshipDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new FriendshipValidator());
+        MessageDbRepository messageDbRepository=new MessageDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new MessageValidator(),userDbRepository);
+        GroupsDbRepository groupsDbRepository=new GroupsDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", userDbRepository,messageDbRepository);
 
-        //}catch(FileNotFoundException e)
-        //{
-        //   e.printStackTrace();
-        //}
+        List<Entity> lista=new ArrayList<>();
+        Event event=new Event("1","1","mures","da",1L);
+        User user=new User("A","B","ab","parla");
+        lista.add(event);
+        lista.add(user);
+        for(Entity entity: lista){
+            if(entity instanceof User){
+                User user1 = (User)(entity);
+                System.out.println(user1);
+                System.out.println(entity);
+        }}
+        //File file = new File("src/main/resources/retea/reteadesocializare/images/loginIcon.jpg");
+        //groupsDbRepository.saveAvatar(8L,file);
+        //groupsDbRepository.findAvatar(8L);
+    */
 
 
-        Repository<Long, User> userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "xela160302", new UserValidator());
-        Repository<Tuple<Long, Long>, Friendship> friendshipDbRepository = new FriendshipDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "xela160302", new FriendshipValidator());
-        MessageDbRepository messageDbRepository=new MessageDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "xela160302", new MessageValidator(),userDbRepository);
-        Service service = new Service(userDbRepository, friendshipDbRepository,messageDbRepository);
-
-        String password = "myPassword";
-        String encryptedpassword = null;
-        try
-        {
-            /* MessageDigest instance for MD5. */
-            MessageDigest m = MessageDigest.getInstance("MD5");
-
-            /* Add plain-text password bytes to digest using MD5 update() method. */
-            m.update(password.getBytes());
-
-            /* Convert the hash value into bytes */
-            byte[] bytes = m.digest();
-
-            /* The bytes array has bytes in decimal form. Converting it into hexadecimal format. */
-            StringBuilder s = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
-                s.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-
-            /* Complete hashed password in hexadecimal format */
-            encryptedpassword = s.toString();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-
-        /* Display the unencrypted and encrypted passwords. */
-        System.out.println("Plain-text password: " + password);
-        System.out.println("Encrypted password using MD5: " + encryptedpassword);
     }
+
 
     //UI ui = new UI(service);
         //ui.run();
+
+
     }
 

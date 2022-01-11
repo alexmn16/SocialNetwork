@@ -22,9 +22,7 @@ import retea.reteadesocializare.domain.validators.FriendshipValidator;
 import retea.reteadesocializare.domain.validators.MessageValidator;
 import retea.reteadesocializare.domain.validators.UserValidator;
 import retea.reteadesocializare.repository.Repository;
-import retea.reteadesocializare.repository.db.FriendshipDbRepository;
-import retea.reteadesocializare.repository.db.MessageDbRepository;
-import retea.reteadesocializare.repository.db.UserDbRepository;
+import retea.reteadesocializare.repository.db.*;
 import retea.reteadesocializare.service.Service;
 import retea.reteadesocializare.service.ServiceException;
 
@@ -42,7 +40,9 @@ public class HelloController implements Initializable{
         Repository<Long, User> userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new UserValidator());
         Repository<Tuple<Long, Long>, Friendship> friendshipDbRepository = new FriendshipDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new FriendshipValidator());
         MessageDbRepository messageDbRepository=new MessageDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new MessageValidator(),userDbRepository);
-        Service service1 = new Service(userDbRepository, friendshipDbRepository,messageDbRepository);
+        GroupsDbRepository groupsDbRepository=new GroupsDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", userDbRepository,messageDbRepository);
+        EventsDbRepository eventsDbRepository = new EventsDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", userDbRepository);
+        Service service1 = new Service(userDbRepository, friendshipDbRepository, messageDbRepository, groupsDbRepository, eventsDbRepository);
         this.service = service1;
 
     }
@@ -123,16 +123,17 @@ public class HelloController implements Initializable{
         try {
             ID=service.findOneUser(username,password);
 
+            MainMenuController mainMenuController = new MainMenuController();
             FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
-            root=loader.load();
-            MainMenuController mainMenuController = loader.getController();
-
             mainMenuController.setService(service,ID);
+            loader.setController(mainMenuController);
+            root=loader.load();
 
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             Scene scene=new Scene(root);
             stage.setTitle("CyberBear");
             stage.setScene(scene);
+
             stage.show();
 
         }catch(ServiceException ex){

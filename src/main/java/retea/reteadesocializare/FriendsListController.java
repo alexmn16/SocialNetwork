@@ -8,17 +8,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import retea.reteadesocializare.domain.Friendship;
 import retea.reteadesocializare.domain.User;
+import retea.reteadesocializare.domain.observer.ListObservable;
 import retea.reteadesocializare.domain.validators.ValidationException;
 import retea.reteadesocializare.service.Service;
 import retea.reteadesocializare.service.ServiceException;
@@ -76,6 +76,9 @@ public class FriendsListController implements Initializable {
     private Button DeleteFriendButton;
 
     @FXML
+    private Button WriteMessageButton;
+
+    @FXML
     private ImageView logoBackToMainMenu;
 
     private Service service;
@@ -89,10 +92,35 @@ public class FriendsListController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
+
         ObservableList<User> items = FXCollections.observableArrayList (
                 service.getUserFriends(ID));
         FriendsList.setItems(items);
+
+
+        FriendsList.setCellFactory(param -> new ListCell<User>() {
+            private ImageView imageView = new ImageView();
+            @Override
+            public void updateItem(User user, boolean empty) {
+                super.updateItem(user, empty);
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    Image image= service.loadAvatar(user.getId());
+                    imageView.setImage(image);
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(60);
+                    imageView.setFitHeight(60);
+                    setText(user.getFirstName()+" "+user.getLastName());
+                    setGraphic(imageView);
+                }
+            }
+        });
+
+
     }
+
 
     @FXML
     void DeleteFriendButtonClicked(MouseEvent event) {
@@ -111,7 +139,6 @@ public class FriendsListController implements Initializable {
             ObservableList<User> items = FXCollections.observableArrayList (
                     service.getUserFriends(ID));
             FriendsList.setItems(items);
-
 
 
     }
@@ -152,15 +179,17 @@ public class FriendsListController implements Initializable {
 
     @FXML
     void backToMainMenu(MouseEvent event) throws IOException{
+        MainMenuController mainMenuController = new MainMenuController();
         FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
-        root=loader.load();
-        MainMenuController mainMenuController = loader.getController();
         mainMenuController.setService(service,ID);
+        loader.setController(mainMenuController);
+        root=loader.load();
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene=new Scene(root);
         stage.setTitle("CyberBear");
         stage.setScene(scene);
+
         stage.show();
     }
 
@@ -183,6 +212,26 @@ public class FriendsListController implements Initializable {
         FXMLLoader loader= new FXMLLoader(getClass().getResource("searchUser-view.fxml"));
         searchUsersController.setService(service,ID,text);
         loader.setController(searchUsersController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    @FXML
+    void WriteMessageButtonClicked(MouseEvent event) throws IOException{
+
+        User selectedUser=FriendsList.getSelectionModel().getSelectedItem();
+        Long idUser= selectedUser.getId();
+
+        ConversationController conversationController = new ConversationController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("conversation-view.fxml"));
+        conversationController.setService(service,ID,idUser);
+        loader.setController(conversationController);
         root=loader.load();
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

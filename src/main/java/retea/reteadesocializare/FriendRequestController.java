@@ -8,10 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -113,6 +111,43 @@ public class FriendRequestController implements Initializable {
         FriendRequests.setItems(items);
         FriendRequestListDate.setItems(items1);
 
+        FriendRequests.setCellFactory(param -> new ListCell<User>() {
+            private ImageView imageView = new ImageView();
+            @Override
+            public void updateItem(User user, boolean empty) {
+                super.updateItem(user, empty);
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    Image image= service.loadAvatar(user.getId());
+                    imageView.setImage(image);
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(60);
+                    imageView.setFitHeight(60);
+                    setText(user.getFirstName()+" "+user.getLastName());
+                    setGraphic(imageView);
+                }
+            }
+        });
+
+        FriendRequestListDate.setCellFactory(param -> new ListCell<String>() {
+            private ImageView imageView = new ImageView();
+            @Override
+            public void updateItem(String date, boolean empty) {
+                super.updateItem(date, empty);
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(60);
+                    imageView.setFitHeight(60);
+                    setText(date);
+                    setGraphic(imageView);
+                }
+            }
+        });
 
     }
 
@@ -171,15 +206,17 @@ public class FriendRequestController implements Initializable {
 
     @FXML
     void backToMainMenu(MouseEvent event) throws IOException{
+        MainMenuController mainMenuController = new MainMenuController();
         FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
-        root=loader.load();
-        MainMenuController mainMenuController = loader.getController();
         mainMenuController.setService(service,ID);
+        loader.setController(mainMenuController);
+        root=loader.load();
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene=new Scene(root);
         stage.setTitle("CyberBear");
         stage.setScene(scene);
+
         stage.show();
     }
 
