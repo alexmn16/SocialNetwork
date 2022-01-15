@@ -27,17 +27,37 @@
     <children>
         <VBox prefHeight="314.0" prefWidth="137.0" style="-fx-background-color: #4b77bb;" stylesheets="@css/styleMainMenu.css" GridPane.rowIndex="1">
             <children>
-                <Button fx:id="FriendsListButton" mnemonicParsing="false" onMouseClicked="#FriendsListButtonClicked" prefHeight="73.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="See your friends" textAlignment="JUSTIFY" textFill="WHITE">
+                <Button fx:id="homeButton" mnemonicParsing="false" onMouseClicked="#homeButtonClicked" prefHeight="42.0" prefWidth="136.0" text="Home">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="FriendRequestsButton" mnemonicParsing="false" onMouseClicked="#FriendRequestsButtonClicked" prefHeight="63.0" prefWidth="137.0" stylesheets="@css/styleMainMenu.css" text="Friend requests" textAlignment="JUSTIFY" textFill="WHITE">
+                <Button fx:id="FriendRequestsButton" mnemonicParsing="false" onMouseClicked="#FriendRequestsButtonClicked" prefHeight="42.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="Friend requests" textAlignment="JUSTIFY" textFill="WHITE">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="LogOutButton" mnemonicParsing="false" onMouseClicked="#LogOutButtonClicked" prefHeight="60.0" prefWidth="137.0" stylesheets="@css/styleMainMenu.css" text="Log out" textAlignment="JUSTIFY" textFill="WHITE">
+                <Button fx:id="FriendsListButton" mnemonicParsing="false" onMouseClicked="#FriendsListButtonClicked" prefHeight="42.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="Friends" textAlignment="JUSTIFY" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="GroupsListButton" mnemonicParsing="false" onMouseClicked="#GroupsButtonClicked" prefHeight="42.0" prefWidth="136.0" text="Groups" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="EventsButton" mnemonicParsing="false" onMouseClicked="#EventsButtonClicked" prefHeight="42.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="Events" textAlignment="JUSTIFY" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="reportsButton" mnemonicParsing="false" onMouseClicked="#reportsButtonClicked" prefHeight="42.0" prefWidth="136.0" text="Reports">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="LogOutButton" mnemonicParsing="false" onMouseClicked="#LogOutButtonClicked" prefHeight="42.0" prefWidth="136.0" stylesheets="@css/styleMainMenu.css" text="Log out" textAlignment="JUSTIFY" textFill="WHITE">
                     <font>
                         <Font size="14.0" />
                     </font>
@@ -65,7 +85,6 @@
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                       <ListView fx:id="FriendRequests" prefHeight="277.0" prefWidth="464.0" />
-                  <ListView fx:id="FriendRequestListDate" prefHeight="213.0" prefWidth="489.0" />
                </children>
             </HBox>
          </center>

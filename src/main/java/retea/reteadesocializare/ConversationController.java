@@ -1,5 +1,7 @@
 package retea.reteadesocializare;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,15 +24,20 @@ import retea.reteadesocializare.service.Service;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
+import static javafx.scene.control.PopupControl.USE_PREF_SIZE;
 
 public class ConversationController implements Initializable {
 
     Long ID;
     Long selectedFriendID;
+
+    @FXML
+    private Button reportsButton;
 
     @FXML
     private ListView<String> MessageDateList;
@@ -87,6 +94,8 @@ public class ConversationController implements Initializable {
 
     private Parent root;
 
+    @FXML
+    private ListView<VBox> list;
 
     @FXML
     private Label InfoLabel;
@@ -139,14 +148,20 @@ public class ConversationController implements Initializable {
         toUserHBox.getChildren().add(InfoLabel);
 
         vbox.getChildren().add(toUserHBox);
+        //vbox.setMaxHeight(USE_PREF_SIZE);
+        //vbox.setPrefHeight(USE_COMPUTED_SIZE);
         for (Message message : messages) {
             if(message.getFrom().getId().equals(ID)) {
                 HBox hbox=new HBox();
                 Label messageLabel=new Label();
                 hbox.setAlignment(Pos.BASELINE_RIGHT);
+                //messageLabel.setTextOverrun(OverrunStyle.LEADING_WORD_ELLIPSIS);
                 messageLabel.setText(adjustText(message.getMessageText()));
+                //messageLabel.setText(message.getMessageText());
                 messageLabel.getStyleClass().add("messageReceivedLabel");
-
+                //messageLabel.setMaxHeight(USE_PREF_SIZE);
+                //messageLabel.setWrapText(true);
+                //messageLabel.setPrefHeight(USE_COMPUTED_SIZE);
                 // hbox.getStyleClass().add("friendRequestsHBox");
                // messageLabel.setAlignment(Pos.BOTTOM_RIGHT);
                 VBox vboxMessage=new VBox();
@@ -163,6 +178,8 @@ public class ConversationController implements Initializable {
                 vboxMessage.getChildren().add(nameDateLabel);
                 vboxMessage.getChildren().add(messageLabel);
                 vboxMessage.setAlignment(Pos.BASELINE_RIGHT);
+               // vboxMessage.setMaxHeight(USE_PREF_SIZE);
+               // vboxMessage.setPrefHeight(USE_COMPUTED_SIZE);
                 vbox.getChildren().add(vboxMessage);
                 //messageListRight.add(message.getMessageText());
                 //messageList.add("");
@@ -172,7 +189,10 @@ public class ConversationController implements Initializable {
                 //messageListRight.add("");
                 Label messageLabel=new Label();
                 messageLabel.setText(adjustText(message.getMessageText()));
-
+                //messageLabel.setText(message.getMessageText());
+                //messageLabel.setTextOverrun(OverrunStyle.LEADING_WORD_ELLIPSIS);
+                //messageLabel.setPrefHeight(USE_COMPUTED_SIZE);
+               // messageLabel.setWrapText(true);
                 Label nameDateLabel=new Label();
                 nameDateLabel.setFont(new Font("Arial",7));
                 nameDateLabel.getStyleClass().add("invisibleLabel");
@@ -181,13 +201,15 @@ public class ConversationController implements Initializable {
                 VBox vboxMessage=new VBox();
                 vboxMessage.getChildren().add(nameDateLabel);
                 vboxMessage.getChildren().add(messageLabel);
-
+               // vboxMessage.setMaxHeight(USE_PREF_SIZE);
+               // vboxMessage.setPrefHeight(USE_COMPUTED_SIZE);
                 vbox.getChildren().add(vboxMessage);
             }
 
         }
-        vbox.setMaxHeight(USE_COMPUTED_SIZE);
-        vbox.setMinWidth(USE_COMPUTED_SIZE);
+
+      //  vbox.setMaxHeight(USE_COMPUTED_SIZE);
+      //  vbox.setMinWidth(USE_COMPUTED_SIZE);
         MessageList.setContent(vbox);
         MessageList.setVvalue(1D);
        // MessageList.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -248,7 +270,8 @@ public class ConversationController implements Initializable {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-
+        Image image = new Image(getClass().getResource("images/logoIcon.PNG").toExternalForm());
+        stage.getIcons().add(image);
         stage.setTitle("Log In");
         stage.setScene(scene);
         stage.show();
@@ -279,9 +302,76 @@ public class ConversationController implements Initializable {
         MessageTextField.setText("");
     }
 
+    @FXML
+    void reportsButtonClicked(MouseEvent event) throws IOException {
+        ReportsController  reportsController = new ReportsController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("reports-view.fxml"));
+        reportsController.setService(service,ID);
+        loader.setController(reportsController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    @FXML
+    void GroupsButtonClicked(MouseEvent event) throws IOException{
+        GroupsController groupsController = new GroupsController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("groups-view.fxml"));
+        groupsController.setService(service,ID);
+        loader.setController(groupsController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+
+    @FXML
+    void EventsButtonClicked(MouseEvent event) throws IOException{
+        EventController eventController = new EventController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("events-view.fxml"));
+        eventController.setService(service,ID);
+        loader.setController(eventController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    @FXML
+    void homeButtonClicked(MouseEvent event) throws IOException {
+        MainMenuController mainMenuController = new MainMenuController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
+        mainMenuController.setService(service,ID);
+        loader.setController(mainMenuController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
 
     @FXML
     void refreshButtonClicked(MouseEvent event) {
+
         reloadConversation();
     }
+
+
 }

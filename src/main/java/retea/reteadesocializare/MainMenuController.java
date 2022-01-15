@@ -66,6 +66,12 @@ public class MainMenuController implements Initializable{
     private Button LogInButton;
 
     @FXML
+    private Button homeButton;
+
+    @FXML
+    private Button reportsButton;
+
+    @FXML
     private TextField LoginTextField;
 
     @FXML
@@ -279,40 +285,38 @@ public class MainMenuController implements Initializable{
             try {
                 dateAux = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(event.getDate());
                 Date currentDate= java.util.Calendar.getInstance().getTime();
+                boolean check=service.checkUserEventNotifications(16L,16L);
                 if(dateAux.after(currentDate)) {
                     Map<TimeUnit, Long> diffMap = dateDifference.computeDiff(currentDate,dateAux);
                     Long timeLeft = diffMap.get(TimeUnit.MINUTES) + diffMap.get(TimeUnit.HOURS) * 60 + diffMap.get(TimeUnit.DAYS) * 60 * 24;
                     //if(service.checkUserHasNotifications(ID,event.getId(),timeLeft))
                         //events.add(event);
-                    if(timeLeft<1 ) {
-                        events.add(event);
-                        if(service.getLastNotificationSeenFromUser(ID,event.getId())!=1)
-                            showIcon=true;
-                    }
-                    else if(timeLeft<2 ) {
-                        events.add(event);
-                        if(service.getLastNotificationSeenFromUser(ID,event.getId())!=2)
-                            showIcon=true;
-                    }
-                    else if(timeLeft<3 ) {
-                        events.add(event);
-                        if(service.getLastNotificationSeenFromUser(ID,event.getId())!=3)
-                            showIcon=true;
-                    }
-                    else if(timeLeft<4 ) {
-                        events.add(event);
-                        if(service.getLastNotificationSeenFromUser(ID,event.getId())!=4)
-                            showIcon=true;
-                    }
-                    else if(timeLeft<5 ) {
-                        events.add(event);
-                        if(service.getLastNotificationSeenFromUser(ID,event.getId())!=5)
-                            showIcon=true;
-                    }
-                    else if(timeLeft<10 ) {
-                        events.add(event);
-                        if(service.getLastNotificationSeenFromUser(ID,event.getId())!=10)
-                            showIcon=true;
+                    if(service.checkUserEventNotifications(ID,event.getId())) {
+                        if (timeLeft < 1) {
+                            events.add(event);
+                            if (service.getLastNotificationSeenFromUser(ID, event.getId()) != 1)
+                                showIcon = true;
+                        } else if (timeLeft < 2) {
+                            events.add(event);
+                            if (service.getLastNotificationSeenFromUser(ID, event.getId()) != 2)
+                                showIcon = true;
+                        } else if (timeLeft < 3) {
+                            events.add(event);
+                            if (service.getLastNotificationSeenFromUser(ID, event.getId()) != 3)
+                                showIcon = true;
+                        } else if (timeLeft < 4) {
+                            events.add(event);
+                            if (service.getLastNotificationSeenFromUser(ID, event.getId()) != 4)
+                                showIcon = true;
+                        } else if (timeLeft < 5) {
+                            events.add(event);
+                            if (service.getLastNotificationSeenFromUser(ID, event.getId()) != 5)
+                                showIcon = true;
+                        } else if (timeLeft < 10) {
+                            events.add(event);
+                            if (service.getLastNotificationSeenFromUser(ID, event.getId()) != 10)
+                                showIcon = true;
+                        }
                     }
 
                 }
@@ -469,11 +473,12 @@ public class MainMenuController implements Initializable{
 
 
         FriendRequests.setOrientation(Orientation.HORIZONTAL);
-        List<Friendship> friendshipList = service.pendingFriendships(ID);
+        List <User> userList = service.pendingFriendships(ID);
+        /*List<Friendship> friendshipList = service.pendingFriendships(ID);
         List<User> userList =  new ArrayList<>();
         for (Friendship friendship : friendshipList){
             userList.add(service.findOneUser(friendship.getSender()));
-        }
+        }*/
         ObservableList<User> items = FXCollections.observableArrayList(userList);
         FriendRequests.setItems(items);
 
@@ -590,12 +595,14 @@ public class MainMenuController implements Initializable{
 
     @FXML
     void LogOutButtonClicked(MouseEvent event) throws IOException {
+        Image image = new Image(getClass().getResource("images/logoIcon.PNG").toExternalForm());
         ((Node)(event.getSource())).getScene().getWindow().hide();
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("Log In");
         stage.setScene(scene);
+        stage.getIcons().add(image);
 
         stage.show();
     }
@@ -705,6 +712,41 @@ public class MainMenuController implements Initializable{
         }
             reloadNotifications();
         }
+
+
+
+    @FXML
+    void homeButtonClicked(MouseEvent event) throws IOException {
+        MainMenuController mainMenuController = new MainMenuController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
+        mainMenuController.setService(service,ID);
+        loader.setController(mainMenuController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
     }
+
+    @FXML
+    void reportsButtonClicked(MouseEvent event) throws IOException {
+        ReportsController  reportsController = new ReportsController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("reports-view.fxml"));
+        reportsController.setService(service,ID);
+        loader.setController(reportsController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+}
 
 

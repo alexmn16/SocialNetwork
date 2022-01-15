@@ -31,7 +31,6 @@ import java.security.MessageDigest;
 
 public class Main {
 
-
     public static void main(String[] args) {
         /*
         Repository<Long, User> userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/ReteaDeSocializare", "postgres", "142001", new UserValidator());
@@ -60,8 +59,8 @@ public class Main {
 
 
     //UI ui = new UI(service);
-        //ui.run();
+    //ui.run();
+}
 
 
-    }
 

@@ -11,9 +11,7 @@ import java.io.*;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class GroupsDbRepository {
     private String url;
@@ -386,4 +384,62 @@ public class GroupsDbRepository {
         }
         return null;
     }
+
+    public List<User> findUserFriends(Long id){
+        List<User> users=new ArrayList<>();
+        String sql = "select * from users inner join friendships on id=id1 where id2=? and friendship_status='approved' union select * from users inner join friendships on id=id2 where id1=? and friendship_status='approved'";
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.setLong(2,id);
+
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+
+                Long idUser = resultSet.getLong("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String username= resultSet.getString("username");
+                String password=resultSet.getString("password");
+                User utilizator = new User(firstName, lastName,username,password);
+                utilizator.setId(idUser);
+                users.add(utilizator);
+            }
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<User> findUserRequests(Long id){
+        List<User> users=new ArrayList<>();
+        String sql = "select * from users inner join friendships on id=id1 where id2=? and friendship_status='pending' and sender != ? union select * from users inner join friendships on id=id2 where id1=? and friendship_status='pending' and sender != ?";
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.setLong(2,id);
+            statement.setLong(3, id);
+            statement.setLong(4, id);
+
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+
+                Long idUser = resultSet.getLong("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String username= resultSet.getString("username");
+                String password=resultSet.getString("password");
+                User utilizator = new User(firstName, lastName,username,password);
+                utilizator.setId(idUser);
+                users.add(utilizator);
+            }
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

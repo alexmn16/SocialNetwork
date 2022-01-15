@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="page" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="547.0" prefWidth="605.0" style="-fx-background-color: #ffffff;">
+         <children>
+            <ImageView fitHeight="82.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logo.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="213.0" layoutY="11.0" prefHeight="35.0" prefWidth="302.0" text="Activity report" textFill="#4b77bb">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <PieChart fx:id="report1Chart" layoutX="376.0" layoutY="82.0" prefHeight="200.0" prefWidth="209.0" AnchorPane.rightAnchor="14.0" />
+            <ListView fx:id="friendsList" layoutX="14.0" layoutY="94.0" prefHeight="188.0" prefWidth="343.0" />
+            <ListView fx:id="messagesList" layoutX="14.0" layoutY="321.0" prefHeight="213.0" prefWidth="573.0" />
+            <Label layoutX="116.0" layoutY="65.0" prefHeight="25.0" prefWidth="241.0" text="Friends" textFill="#4b77bb">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="116.0" layoutY="289.0" prefHeight="25.0" prefWidth="317.0" text="Messages" textFill="#4b77bb">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Button fx:id="exportPDFButton" layoutX="389.0" layoutY="289.0" mnemonicParsing="false" onMouseClicked="#exportPDFButtonClicked" prefHeight="25.0" prefWidth="209.0" stylesheets="@css/style.css" text="Export as PDF" AnchorPane.rightAnchor="14.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

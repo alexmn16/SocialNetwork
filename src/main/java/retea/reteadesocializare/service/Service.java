@@ -205,6 +205,7 @@ public class Service {
      * @return a list of user's friends
      */
     public List<User> getUserFriends(Long id) {
+        /*
         User user=findOneUser(id);
         Iterable<Friendship> friendships=getAllFriendships();
         List<Friendship> friendshipsList = new ArrayList<>();
@@ -227,7 +228,7 @@ public class Service {
                 );
 
         return friends;
-
+    */return groupsDbRepository.findUserFriends(id);
 
     }
     /**
@@ -465,8 +466,8 @@ public class Service {
      * @param id - user's id
      * @return a list of user's pending friend requests
      */
-    public List<Friendship> pendingFriendships(Long id) {
-        List<Friendship> pendingFriendships = new ArrayList<>();
+    public List<User> pendingFriendships(Long id) {
+        /*List<Friendship> pendingFriendships = new ArrayList<>();
         Iterable<Friendship> friendships = friendshipRepository.findAll();
         for (Friendship friendship : friendships) {
             if( ((friendship.getId().getLeft().equals(id) && !friendship.getId().getLeft().equals(friendship.getSender()) )
@@ -474,7 +475,9 @@ public class Service {
                     && friendship.getFriendshipStatus().equals("pending") )
                 pendingFriendships.add(friendship);
         }
-        return pendingFriendships;
+        return pendingFriendships;*/
+
+        return groupsDbRepository.findUserRequests(id);
     }
     public Iterable<User> findAllUsersStartsWith(String text){
 

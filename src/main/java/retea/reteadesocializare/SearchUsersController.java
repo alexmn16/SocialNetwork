@@ -118,7 +118,6 @@ public class SearchUsersController implements Initializable {
     @FXML
     void AddFriendButtonClicked(MouseEvent event) {
         ErrorMessageAddFriend.setText("");
-
         User selectedUser=(User)EntityList.getSelectionModel().getSelectedItem();
         Long idTo = selectedUser.getId();
         try{
@@ -186,7 +185,8 @@ public class SearchUsersController implements Initializable {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-
+        Image image = new Image(getClass().getResource("images/logoIcon.PNG").toExternalForm());
+        stage.getIcons().add(image);
         stage.setTitle("Log In");
         stage.setScene(scene);
         stage.show();
@@ -356,6 +356,71 @@ public class SearchUsersController implements Initializable {
         FXMLLoader loader= new FXMLLoader(getClass().getResource("eventDetails-view.fxml"));
         eventDetailsController.setService(service,ID,idEvent);
         loader.setController(eventDetailsController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    @FXML
+    void reportsButtonClicked(MouseEvent event) throws IOException {
+        ReportsController mainMenuController = new ReportsController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("reports-view.fxml"));
+        mainMenuController.setService(service,ID);
+        loader.setController(mainMenuController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    @FXML
+    void GroupsButtonClicked(MouseEvent event) throws IOException{
+        GroupsController groupsController = new GroupsController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("groups-view.fxml"));
+        groupsController.setService(service,ID);
+        loader.setController(groupsController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+
+    @FXML
+    void EventsButtonClicked(MouseEvent event) throws IOException{
+        EventController eventController = new EventController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("events-view.fxml"));
+        eventController.setService(service,ID);
+        loader.setController(eventController);
+        root=loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene=new Scene(root);
+        stage.setTitle("CyberBear");
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    @FXML
+    void homeButtonClicked(MouseEvent event) throws IOException {
+        MainMenuController mainMenuController = new MainMenuController();
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("mainMenu-view.fxml"));
+        mainMenuController.setService(service,ID);
+        loader.setController(mainMenuController);
         root=loader.load();
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

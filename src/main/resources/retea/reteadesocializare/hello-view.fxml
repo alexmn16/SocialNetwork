@@ -29,7 +29,7 @@
             <Button fx:id="RegisterButton" layoutX="368.0" layoutY="196.0" mnemonicParsing="false" onMouseClicked="#RegisterButtonClicked" prefHeight="18.0" prefWidth="62.0" text="Register" AnchorPane.rightAnchor="175.0" />
             <Button fx:id="LogInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="174.0" layoutY="151.0" mnemonicParsing="false" onMouseClicked="#LogInButtonClicked" prefHeight="37.0" prefWidth="251.0" text="Log in" textAlignment="JUSTIFY" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
             <TextField fx:id="UsernameTextField" layoutX="173.0" layoutY="24.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your username..." AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
-            <PasswordField fx:id="InvisiblePasswordField" layoutX="173.0" layoutY="74.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." />
+            <PasswordField fx:id="InvisiblePasswordField" layoutX="173.0" layoutY="74.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
             <Label layoutX="178.0" layoutY="200.0" prefHeight="17.0" prefWidth="188.0" text="Haven't registered yet?  Create an account" textFill="WHITE" AnchorPane.leftAnchor="173.0">
                <font>
                   <Font size="9.0" />
@@ -40,7 +40,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <TextField fx:id="VisiblePasswordField" layoutX="173.0" layoutY="74.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
+            <TextField fx:id="VisiblePasswordField" layoutX="174.0" layoutY="74.0" prefHeight="37.0" prefWidth="251.0" promptText="Introduce your password..." AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="175.0" />
          </children>
       </AnchorPane>
    </bottom>

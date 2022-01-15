@@ -124,4 +124,5 @@ public class FriendshipDbRepository implements Repository<Tuple<Long, Long>, Fri
 
     @Override
     public List<Friendship> findConversation(Long id1, Long id2){return null;}
+
 }
